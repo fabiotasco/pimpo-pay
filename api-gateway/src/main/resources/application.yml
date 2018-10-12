@@ -31,6 +31,11 @@ zuul:
       path: /auth/**
       strip-prefix: false
       service-id: auth-service
+    account-service:
+      sensitive-headers:
+      path: /account/**
+      strip-prefix: false
+      service-id: account-service
     register-service:
       sensitive-headers:
       path: /register/**

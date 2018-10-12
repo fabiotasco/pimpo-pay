@@ -1,4 +1,4 @@
-package pay.pimpo.register;
+package pay.pimpo.account;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class RegisterServiceApplicationTests {
+public class AccountServiceApplicationTests {
 
 	@Test
 	public void contextLoads() {

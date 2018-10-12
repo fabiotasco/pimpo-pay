@@ -43,5 +43,6 @@ dependencies {
 	compile project(':api-gateway')
 	compile project(':commons')
 	compile project(':auth-service')
-	compile project(':register-service')
+	compile project(':enroll-service')
+	compile project(':account-service')
 }

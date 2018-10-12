@@ -2,6 +2,7 @@ include ':discovery-server'
 include ':api-gateway'
 include ':commons'
 include ':auth-service'
-include ':register-service'
+include ':enroll-service'
+include ':account-service'
 
 rootProject.name = 'pimpo-pay-solution'
