@@ -1,0 +1,47 @@
+# Spring
+spring:
+  application:
+    name: api-gateway
+
+# Server
+server:
+  port: 8080
+  
+# Management
+management:
+  endpoint:
+    restart:
+      enabled: true
+    shutdown:
+      enabled: false
+
+# Eureka
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka
+
+# Zuul
+zuul:
+  prefix: /api
+  ignoredServices: "*"
+  routes:
+    auth-service:
+      sensitive-headers:
+      path: /auth/**
+      strip-prefix: false
+      service-id: auth-service
+    register-service:
+      sensitive-headers:
+      path: /register/**
+      strip-prefix: false
+      service-id: register-service
+
+# Log
+logging:
+  level:
+    ROOT: info
+    org.springframework.web: info
+    pay.pimpo: debug
+  file:  /tmp/logs/api-gateway.log
+      

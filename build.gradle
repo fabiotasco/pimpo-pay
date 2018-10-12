@@ -1,0 +1,47 @@
+buildscript {
+	ext {
+		version = '1.0.0'
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+jar {
+	baseName = 'pimpo-pay-solution'
+	version = "${version}"
+}
+
+group = 'pay.pimpo'
+version = "${version}"
+
+def javaProjects() {
+    subprojects.findAll { new File(it.projectDir, 'src').directory }
+}
+
+allprojects {
+	apply plugin: 'java'
+	apply plugin: 'eclipse'
+
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+	
+	compileJava {
+    	options.fork = true
+    	options.incremental = true
+    	options.encoding = 'UTF-8'
+	}
+	
+	repositories {
+		jcenter()
+		mavenCentral()
+	}
+}
+
+dependencies {
+	compile project(':discovery-server')
+	compile project(':api-gateway')
+	compile project(':commons')
+	compile project(':auth-service')
+	compile project(':register-service')
+}

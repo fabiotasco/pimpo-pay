@@ -1,0 +1,7 @@
+include ':discovery-server'
+include ':api-gateway'
+include ':commons'
+include ':auth-service'
+include ':register-service'
+
+rootProject.name = 'pimpo-pay-solution'

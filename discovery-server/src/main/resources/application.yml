@@ -1,0 +1,26 @@
+# Spring
+spring:
+  application:
+    name: discovery-server
+
+# Server
+server:
+  port: 8761
+  
+# Eureka
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+# Log
+logging:
+  level:
+    ROOT: info
+    org.springframework.web: info
+    com.netflix.eureka: error
+    com.netflix.discovery: error
+    pay.pimpo: debug
+  file:  /tmp/logs/discovery-server.log
