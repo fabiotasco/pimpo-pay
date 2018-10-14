@@ -11,7 +11,8 @@ spring:
     tomcat:
       test-while-idle: true
       validation-query: SELECT 1
-    initialization-mode: never
+    initialization-mode: always
+    continue-on-error: true
     platform: mysql
   jpa:
     properties:
@@ -20,7 +21,13 @@ spring:
     hibernate:
       naming:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-      ddl-auto: update
+      ddl-auto: none
+      use-new-id-generator-mappings: false
+  # Spring Cloud tem conflitos de referência circular com Spring Data Source
+  # https://github.com/spring-cloud/spring-cloud-commons/issues/355
+  cloud:
+    refresh:
+      refreshable: none
 
 # Server
 server:
@@ -40,5 +47,7 @@ logging:
   level:
     ROOT: info
     org.springframework.web: info
+    org.hibernate.SQL: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
     pay.pimpo: debug
   file:  /tmp/logs/auth-service.log

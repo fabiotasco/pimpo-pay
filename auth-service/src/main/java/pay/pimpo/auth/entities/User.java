@@ -37,7 +37,7 @@ public class User implements UserDetails, Serializable {
 	@Column(length = 14, nullable = false, unique = true)
 	private String username;
 
-	@Column(length = 100, nullable = false)
+	@Column(length = 60, nullable = false)
 	private String password;
 
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -54,6 +54,13 @@ public class User implements UserDetails, Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date updatedAt;
+
+	User() {}
+
+	public User(final String username, final String password) {
+		this.username = username;
+		this.password = password;
+	}
 
 	@PrePersist
 	private void prePersist() {

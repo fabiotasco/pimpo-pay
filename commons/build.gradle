@@ -10,5 +10,12 @@ repositories {
 }
 
 dependencies {
-	compile('org.springframework.cloud:spring-cloud-starter-feign:1.4.5.RELEASE')
+	implementation('org.springframework.cloud:spring-cloud-starter-openfeign:2.0.1.RELEASE')
+
+	implementation('org.springframework.data:spring-data-jpa:2.0.8.RELEASE')
+	implementation('org.hibernate:hibernate-entitymanager:5.0.12.Final')
+
+	implementation('com.fasterxml.jackson.core:jackson-annotations:2.9.7')
+	implementation('javax.validation:validation-api:2.0.1.Final')
+	
 }

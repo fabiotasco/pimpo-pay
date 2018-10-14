@@ -30,21 +30,18 @@ ext {
 
 dependencies {
 	compile('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
-	
-	compile('org.springframework.cloud:spring-cloud-starter-oauth2')
 	compile('org.springframework.cloud:spring-cloud-starter-security')
 	
 	runtimeOnly('org.springframework.boot:spring-boot-devtools')
-	
 	compile('org.springframework.boot:spring-boot-starter-actuator')
-	
 	compile('org.springframework.boot:spring-boot-starter-jdbc')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	
 	runtime('mysql:mysql-connector-java')
 	
+	implementation project(':commons')
+	
 	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('commons-codec:commons-codec:1.11')
 }
 
 dependencyManagement {

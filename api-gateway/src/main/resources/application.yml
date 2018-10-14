@@ -36,11 +36,20 @@ zuul:
       path: /account/**
       strip-prefix: false
       service-id: account-service
-    register-service:
+    enroll-service:
       sensitive-headers:
-      path: /register/**
+      path: /enroll/**
       strip-prefix: false
-      service-id: register-service
+      service-id: enroll-service
+
+# Hystrix
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeout-in-milliseconds: 100000
 
 # Log
 logging:

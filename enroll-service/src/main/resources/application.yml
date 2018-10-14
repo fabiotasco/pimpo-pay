@@ -1,0 +1,46 @@
+# Spring
+spring:
+  profiles: default
+  application:
+    name: enroll-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/enroll?useSSL=false
+    username: root
+    password: 12345678
+    driver-class-name: com.mysql.jdbc.Driver
+    tomcat:
+      test-while-idle: true
+      validation-query: SELECT 1
+    initialization-mode: never
+    platform: mysql
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      naming:
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+      ddl-auto: update
+
+# Server
+server:
+  port: 9020
+  use-forward-headers: false
+  servlet:
+    context-path: /enroll
+
+# Eureka
+eureka:
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka
+
+# Log
+logging:
+  level:
+    ROOT: info
+    org.springframework.web: info
+    org.hibernate.SQL: info
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+    pay.pimpo: debug
+  file:  /tmp/logs/enroll-service.log
