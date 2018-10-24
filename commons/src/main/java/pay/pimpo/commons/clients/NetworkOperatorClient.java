@@ -9,10 +9,10 @@ import pay.pimpo.commons.api.Response;
 import pay.pimpo.commons.entities.NetworkOperator;
 import pay.pimpo.commons.exceptions.NetworkOperatorNotFoundException;
 
-@FeignClient(name = "network-operator-service", url = "localhost:9010/account/network-operators")
+@FeignClient(name = "network-operator-service", url = "${api.client.account-service.url}")
 public interface NetworkOperatorClient {
 
-	@GetMapping("/{name}")
+	@GetMapping("/network-operators/{name}")
 	Response<NetworkOperator> findByName(@PathVariable("name") final String name)
 		throws NetworkOperatorNotFoundException;
 

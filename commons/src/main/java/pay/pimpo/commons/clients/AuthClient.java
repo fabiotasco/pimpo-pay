@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
-@FeignClient(value = "auth-service", url = "localhost:9000/auth")
+@FeignClient(name = "auth-service", url = "${api.client.auth-service.url}")
 public interface AuthClient {
 
 	@GetMapping("/authenticate")

@@ -14,7 +14,7 @@ management:
       enabled: true
     shutdown:
       enabled: false
-
+        
 # Eureka
 eureka:
   client:
@@ -27,20 +27,20 @@ zuul:
   ignoredServices: "*"
   routes:
     auth-service:
-      sensitive-headers:
       path: /auth/**
-      strip-prefix: false
       service-id: auth-service
+      sensitive-headers:
+      strip-prefix: false
     account-service:
-      sensitive-headers:
-      path: /account/**
-      strip-prefix: false
+      path: /accounts/**
       service-id: account-service
-    enroll-service:
       sensitive-headers:
-      path: /enroll/**
       strip-prefix: false
+    enroll-service:
+      path: /enroll/**
       service-id: enroll-service
+      sensitive-headers:
+      strip-prefix: false
 
 # Hystrix
 hystrix:
@@ -49,7 +49,15 @@ hystrix:
       execution:
         isolation:
           thread:
-            timeout-in-milliseconds: 100000
+            timeout-in-milliseconds: 1000000
+
+# Clients
+api:
+  client:
+    account-service:
+      url: localhost:9010/accounts
+    auth-service:
+      url: localhost:9000/auth
 
 # Log
 logging:
@@ -57,5 +65,6 @@ logging:
     ROOT: info
     org.springframework.web: info
     pay.pimpo: debug
+    pay.pimpo.commons.clients.AuthClient: debug
   file:  /tmp/logs/api-gateway.log
       

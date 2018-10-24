@@ -38,10 +38,21 @@ public class EnrollRules {
 
 	public Response<Account> enroll(final EnrollDto enrollDto) throws Exception {
 		validateEnrollData(enrollDto);
-		final Long userId = createNewUser(enrollDto);
 
-		// TODO: Se houver problema ao criar a conta, é necessário deletar o usuário criado anteriormente (userId).
-		return createNewAccount(enrollDto, userId);
+		// Cria o usuário
+		final Response<Long> createUserResponse = createUser(enrollDto);
+		if (!createUserResponse.isSuccess()) {
+			return new Response<>(createUserResponse.getErrors());
+		}
+
+		// Cria a conta
+		final Long userId = createUserResponse.getContent();
+		final Response<Account> createAccountResponse = createNewAccount(enrollDto, userId);
+		if (!createAccountResponse.isSuccess()) {
+			// Desfaz a criação do usuário, caso ocorra algum problema ao criar a conta
+			userClient.deleteUser(userId);
+		}
+		return createAccountResponse;
 	}
 
 	private void validateEnrollData(final EnrollDto enrollDto)
@@ -54,11 +65,11 @@ public class EnrollRules {
 		networkOperatorClient.findByName(enrollDto.getPhoneDto().getNetworkOperator());
 	}
 
-	private Long createNewUser(final EnrollDto enrollDto) {
+	private Response<Long> createUser(final EnrollDto enrollDto) throws Exception {
 		final CreateUserDto createUserDto
 			= new CreateUserDto(enrollDto.getDocumentDto().getValue(), enrollDto.getPassword());
 
-		return userClient.createUser(createUserDto).getContent();
+		return userClient.createUser(createUserDto);
 	}
 
 	private Response<Account> createNewAccount(final EnrollDto enrollDto, final Long userId) {

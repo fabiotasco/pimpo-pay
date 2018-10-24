@@ -27,8 +27,12 @@ public class EnrollController {
 
 	@PostMapping("/enrollment")
 	public Response<EnrollResponseDto> enrollment(@RequestBody final EnrollDto enrollDto) throws Exception {
-		final Account account = enrollRules.enroll(enrollDto).getContent();
-		return new Response<>(enrollResponseDtoConverter.convert(account));
+		final Response<Account> response = enrollRules.enroll(enrollDto);
+		if (response.isSuccess()) {
+			return new Response<>(enrollResponseDtoConverter.convert(response.getContent()));
+		} else {
+			return new Response<>(response.getErrors());
+		}
 	}
 
 }

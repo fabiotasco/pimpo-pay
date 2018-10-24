@@ -13,10 +13,8 @@ import pay.pimpo.commons.entities.Account;
  * @author fabio.tasco
  * @see AccountController
  */
-@FeignClient(name = "account-service", url = "localhost:9010/account")
+@FeignClient(name = "account-service", url = "${api.client.account-service.url}")
 public interface AccountClient {
-
-	// TODO: Colocar as URLs dos Clients no properties e apontar para o API Gateway
 
 	@PostMapping("/create-account")
 	Response<Account> createAccount(@RequestBody final CreateAccountDto createAccountDto);

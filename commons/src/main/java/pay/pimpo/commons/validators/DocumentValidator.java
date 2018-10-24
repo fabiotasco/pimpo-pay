@@ -26,7 +26,6 @@ public class DocumentValidator {
 	 */
 	public boolean validate(final String document, final SupportedDocumentType documentType)
 		throws InvalidDocumentException {
-		// FIXME: Enviar essa validação para a camada de regras do serviço de autenticação
 		switch (documentType) {
 			case CPF:
 				return validateCpf(document);

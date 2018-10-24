@@ -39,6 +39,8 @@ public class AccountRules {
 	 * @throws Exception Caso não seja possível criar a conta.
 	 */
 	public Account createAccount(final CreateAccountDto createAccountDto) throws Exception {
+		accountNumberRules.checkAccountNumberActiveUniqueness(createAccountDto.getPhoneDto().getNumber());
+
 		final AccountType type = accountTypeRules.findAccountType(
 			SupportedDocumentType.getAssociatedAccountType(createAccountDto.getDocumentDto().getType()));
 
@@ -50,7 +52,6 @@ public class AccountRules {
 
 		accountPlanRules.listAccountPlan().forEach(plan -> account.getPlans().add(plan));
 
-		// TODO: O mesmo número ativo não pode ser criado para contas do mesmo tipo
 		account.getNumbers()
 			.add(accountNumberRules.createAccountNumber(createAccountDto.getPhoneDto(), "Active", account));
 

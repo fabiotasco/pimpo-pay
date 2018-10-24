@@ -12,4 +12,5 @@ public class AuthServiceApplication {
 	public static void main(final String[] args) {
 		SpringApplication.run(AuthServiceApplication.class, args);
 	}
+
 }

@@ -21,7 +21,6 @@ public class PhoneValidator {
 	 * @throws InvalidPhoneException Caso seja um número de telefone inválido.
 	 */
 	public boolean validatePhone(final String phone) throws InvalidPhoneException {
-		// FIXME: Enviar essa validação para a camada de regras do serviço de autenticação
 		// Todos os telefones devem começar com o sinal de +
 		if (!phone.startsWith("+")) {
 			throw new InvalidPhoneException("Phone number must start with '+' sign: " + phone);
