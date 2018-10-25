@@ -12,15 +12,16 @@ import org.springframework.web.bind.annotation.RestController;
 import pay.pimpo.commons.api.Error;
 import pay.pimpo.commons.api.Response;
 import pay.pimpo.commons.api.StandardErrors;
+import pay.pimpo.commons.builders.ErrorBuilder;
 import pay.pimpo.commons.exceptions.PimpoPayException;
 
 @RestController
-public class ErrorController extends AbstractErrorController {
+public class ErrorHandlerController extends AbstractErrorController {
 
 	@Value("${error.path:/error}")
 	private String errorPath;
 
-	public ErrorController(final ErrorAttributes errorAttributes) {
+	public ErrorHandlerController(final ErrorAttributes errorAttributes) {
 		super(errorAttributes);
 	}
 
@@ -37,8 +38,12 @@ public class ErrorController extends AbstractErrorController {
 	private Error findStandardError(final HttpServletRequest request) {
 		final Throwable exc = (Throwable) request.getAttribute("javax.servlet.error.exception");
 		final Throwable cause = exc.getCause();
-		if (cause != null && cause instanceof PimpoPayException) {
-			return ((PimpoPayException) cause).getError();
+		if (cause != null) {
+			if (cause instanceof PimpoPayException) {
+				return ((PimpoPayException) cause).getError();
+			} else {
+				return new ErrorBuilder().setCode("GEN-9999").setMessage(cause.getMessage()).build();
+			}
 		}
 		return StandardErrors.INTERNAL_SERVER_ERROR;
 	}
