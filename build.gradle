@@ -39,10 +39,11 @@ allprojects {
 }
 
 dependencies {
-	compile project(':discovery-server')
-	compile project(':api-gateway')
-	compile project(':commons')
-	compile project(':auth-service')
-	compile project(':enroll-service')
-	compile project(':account-service')
+	implementation project(':discovery-server')
+	implementation project(':api-gateway')
+	implementation project(':commons')
+	implementation project(':auth-service')
+	implementation project(':enroll-service')
+	implementation project(':account-service')
+	implementation project(':transactional-service')
 }

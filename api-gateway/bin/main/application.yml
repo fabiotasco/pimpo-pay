@@ -41,6 +41,11 @@ zuul:
       service-id: enroll-service
       sensitive-headers: Cookie,Set-Cookie
       strip-prefix: false
+    transaction-service:
+      path: /transaction/**
+      service-id: transaction-service
+      sensitive-headers: Cookie,Set-Cookie
+      strip-prefix: false
 
 # Hystrix
 hystrix:

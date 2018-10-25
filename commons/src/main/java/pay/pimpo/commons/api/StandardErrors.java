@@ -35,6 +35,10 @@ public class StandardErrors {
 	public static final Error NETWORK_OPERATOR_NOT_FOUND
 		= new ErrorBuilder().setCode("ACT-0007").setMessage("Network operator not found!").build();
 
+	// Environment errors
+	public static final Error MICROSERVICE_NOT_FOUND
+		= new ErrorBuilder().setCode("ENV-0001").setMessage("Microservice not found!").build();
+
 	// General errors
 	public static final Error INTERNAL_SERVER_ERROR
 		= new ErrorBuilder().setCode("GEN-0500").setMessage("Unexpected error ocurred!").build();

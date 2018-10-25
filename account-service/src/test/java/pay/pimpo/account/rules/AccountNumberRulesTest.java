@@ -1,6 +1,8 @@
 
 package pay.pimpo.account.rules;
 
+import javax.transaction.Transactional;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,6 +36,7 @@ public class AccountNumberRulesTest {
 		accountHelper.insertDomainValues();
 	}
 
+	@Transactional
 	@Test(expected = ActiveAccountNumberNotUniqueException.class)
 	public void testCheckAccountNumberUniqueness() throws Exception {
 		final String number = "+5511999990000";

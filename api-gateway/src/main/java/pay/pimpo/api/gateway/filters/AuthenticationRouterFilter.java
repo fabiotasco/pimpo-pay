@@ -12,6 +12,7 @@ import com.netflix.zuul.exception.ZuulException;
 import feign.FeignException;
 import pay.pimpo.api.gateway.rules.AuthenticationRouterRules;
 import pay.pimpo.commons.api.Response;
+import pay.pimpo.commons.exceptions.MicroserviceNotFoundException;
 import pay.pimpo.commons.exceptions.UnauthorizedAccessException;
 
 /**
@@ -39,11 +40,16 @@ public class AuthenticationRouterFilter extends ZuulFilter {
 			if (response.isSuccess()) {
 				context.addZuulRequestHeader("x-user-id", response.getContent().toString());
 			}
-			return response;
 		} catch (final FeignException e) {
 			LOG.error("Error while routing authentication!", e);
-			throw new UnauthorizedAccessException();
+			if (e.status() == 404) {
+				throw new MicroserviceNotFoundException(e.getMessage());
+			}
+			if (e.status() == 401) {
+				throw new UnauthorizedAccessException();
+			}
 		}
+		return context;
 	}
 
 	@Override

@@ -4,5 +4,6 @@ include ':commons'
 include ':auth-service'
 include ':enroll-service'
 include ':account-service'
+include ':transactional-service'
 
 rootProject.name = 'pimpo-pay-solution'
