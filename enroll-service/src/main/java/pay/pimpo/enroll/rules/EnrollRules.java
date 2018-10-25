@@ -11,7 +11,7 @@ import pay.pimpo.commons.clients.UserClient;
 import pay.pimpo.commons.dto.CreateAccountDto;
 import pay.pimpo.commons.dto.CreateUserDto;
 import pay.pimpo.commons.entities.Account;
-import pay.pimpo.commons.exceptions.InvalidDocumentException;
+import pay.pimpo.commons.exceptions.InvalidDocumentFormatException;
 import pay.pimpo.commons.exceptions.InvalidPhoneException;
 import pay.pimpo.commons.exceptions.NetworkOperatorNotFoundException;
 import pay.pimpo.commons.validators.DocumentValidator;
@@ -56,7 +56,7 @@ public class EnrollRules {
 	}
 
 	private void validateEnrollData(final EnrollDto enrollDto)
-		throws InvalidDocumentException,
+		throws InvalidDocumentFormatException,
 		InvalidPhoneException,
 		NetworkOperatorNotFoundException {
 

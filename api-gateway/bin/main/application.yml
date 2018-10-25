@@ -29,17 +29,17 @@ zuul:
     auth-service:
       path: /auth/**
       service-id: auth-service
-      sensitive-headers:
+      sensitive-headers: Cookie,Set-Cookie
       strip-prefix: false
     account-service:
       path: /accounts/**
       service-id: account-service
-      sensitive-headers:
+      sensitive-headers: Cookie,Set-Cookie
       strip-prefix: false
     enroll-service:
       path: /enroll/**
       service-id: enroll-service
-      sensitive-headers:
+      sensitive-headers: Cookie,Set-Cookie
       strip-prefix: false
 
 # Hystrix

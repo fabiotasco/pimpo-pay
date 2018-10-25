@@ -1,13 +1,18 @@
 
 package pay.pimpo.api.gateway.filters;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 
+import feign.FeignException;
 import pay.pimpo.api.gateway.rules.AuthenticationRouterRules;
+import pay.pimpo.commons.api.Response;
+import pay.pimpo.commons.exceptions.UnauthorizedAccessException;
 
 /**
  * Filtro que roteia a autenticação do usuário.
@@ -15,6 +20,8 @@ import pay.pimpo.api.gateway.rules.AuthenticationRouterRules;
  * @author fabio.tasco
  */
 public class AuthenticationRouterFilter extends ZuulFilter {
+
+	private static final Logger LOG = LoggerFactory.getLogger(AuthenticationRouterFilter.class);
 
 	@Autowired
 	private AuthenticationRouterRules authenticationRouterRules;
@@ -26,7 +33,17 @@ public class AuthenticationRouterFilter extends ZuulFilter {
 
 	@Override
 	public Object run() throws ZuulException {
-		return authenticationRouterRules.routeAuthentication(RequestContext.getCurrentContext().getRequest());
+		final RequestContext context = RequestContext.getCurrentContext();
+		try {
+			final Response<Long> response = authenticationRouterRules.routeAuthentication(context.getRequest());
+			if (response.isSuccess()) {
+				context.addZuulRequestHeader("x-user-id", response.getContent().toString());
+			}
+			return response;
+		} catch (final FeignException e) {
+			LOG.error("Error while routing authentication!", e);
+			throw new UnauthorizedAccessException();
+		}
 	}
 
 	@Override

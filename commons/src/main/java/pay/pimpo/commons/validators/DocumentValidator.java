@@ -6,7 +6,7 @@ import java.util.InputMismatchException;
 import org.springframework.stereotype.Component;
 
 import pay.pimpo.commons.dto.SupportedDocumentType;
-import pay.pimpo.commons.exceptions.InvalidDocumentException;
+import pay.pimpo.commons.exceptions.InvalidDocumentFormatException;
 
 /**
  * Validador de documentos.
@@ -22,10 +22,10 @@ public class DocumentValidator {
 	 * @param document Dígitos do documento.
 	 * @param documentType Tipo do documento.
 	 * @return Verdadeiro, se for o documento informado for válido. Falso, caso contrário.
-	 * @throws InvalidDocumentException Quando o documento for inválido.
+	 * @throws InvalidDocumentFormatException Quando o documento for inválido.
 	 */
 	public boolean validate(final String document, final SupportedDocumentType documentType)
-		throws InvalidDocumentException {
+		throws InvalidDocumentFormatException {
 		switch (documentType) {
 			case CPF:
 				return validateCpf(document);
@@ -36,7 +36,7 @@ public class DocumentValidator {
 		}
 	}
 
-	private boolean validateCpf(final String cpf) throws InvalidDocumentException {
+	private boolean validateCpf(final String cpf) throws InvalidDocumentFormatException {
 		if (cpf.equals("00000000000") || cpf.equals("11111111111")
 			|| cpf.equals("22222222222")
 			|| cpf.equals("33333333333")
@@ -46,10 +46,10 @@ public class DocumentValidator {
 			|| cpf.equals("77777777777")
 			|| cpf.equals("88888888888")
 			|| cpf.equals("99999999999")) {
-			throw new InvalidDocumentException("CPF cannot be composed by a sequence of the same number: " + cpf);
+			throw new InvalidDocumentFormatException("CPF cannot be composed by a sequence of the same number: " + cpf);
 		}
 		if (cpf.length() != 11) {
-			throw new InvalidDocumentException("CPF length must be 11 digits: " + cpf);
+			throw new InvalidDocumentFormatException("CPF length must be 11 digits: " + cpf);
 		}
 
 		char tenthDigit, eleventhDigit;
@@ -94,14 +94,14 @@ public class DocumentValidator {
 			if (tenthDigit == cpf.charAt(9) && eleventhDigit == cpf.charAt(10)) {
 				return true;
 			} else {
-				throw new InvalidDocumentException("CPF is invalid: " + cpf);
+				throw new InvalidDocumentFormatException("CPF is invalid: " + cpf);
 			}
 		} catch (final InputMismatchException e) {
-			throw new InvalidDocumentException("CPF is invalid: " + cpf, e);
+			throw new InvalidDocumentFormatException("CPF is invalid: " + cpf, e);
 		}
 	}
 
-	private boolean validateCnpj(final String cnpj) throws InvalidDocumentException {
+	private boolean validateCnpj(final String cnpj) throws InvalidDocumentFormatException {
 		if (cnpj.equals("00000000000000") || cnpj.equals("11111111111111")
 			|| cnpj.equals("22222222222222")
 			|| cnpj.equals("33333333333333")
@@ -111,10 +111,10 @@ public class DocumentValidator {
 			|| cnpj.equals("77777777777777")
 			|| cnpj.equals("88888888888888")
 			|| cnpj.equals("99999999999999")) {
-			throw new InvalidDocumentException("CNPJ cannot be composed by a sequence of the same number: " + cnpj);
+			throw new InvalidDocumentFormatException("CNPJ cannot be composed by a sequence of the same number: " + cnpj);
 		}
 		if (cnpj.length() != 14) {
-			throw new InvalidDocumentException("CNPJ length must be 11 digits: " + cnpj);
+			throw new InvalidDocumentFormatException("CNPJ length must be 11 digits: " + cnpj);
 		}
 
 		char thirteenthDigit, fourteenthDigit;
@@ -165,10 +165,10 @@ public class DocumentValidator {
 			if (thirteenthDigit == cnpj.charAt(12) && fourteenthDigit == cnpj.charAt(13)) {
 				return true;
 			} else {
-				throw new InvalidDocumentException("CNPJ is invalid: " + cnpj);
+				throw new InvalidDocumentFormatException("CNPJ is invalid: " + cnpj);
 			}
 		} catch (final InputMismatchException e) {
-			throw new InvalidDocumentException("CNPJ is invalid: " + cnpj, e);
+			throw new InvalidDocumentFormatException("CNPJ is invalid: " + cnpj, e);
 		}
 	}
 
