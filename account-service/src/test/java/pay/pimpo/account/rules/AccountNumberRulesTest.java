@@ -15,6 +15,8 @@ import pay.pimpo.account.helpers.AccountHelper;
 import pay.pimpo.account.repositories.AccountRepository;
 import pay.pimpo.commons.dto.PhoneDto;
 import pay.pimpo.commons.entities.Account;
+import pay.pimpo.commons.entities.AccountNumberStatus;
+import pay.pimpo.commons.entities.AccountStatus;
 import pay.pimpo.commons.exceptions.ActiveAccountNumberNotUniqueException;
 
 @RunWith(SpringRunner.class)
@@ -40,17 +42,11 @@ public class AccountNumberRulesTest {
 	@Test(expected = ActiveAccountNumberNotUniqueException.class)
 	public void testCheckAccountNumberUniqueness() throws Exception {
 		final String number = "+5511999990000";
-
 		final Account account = createTestAccount();
+		final AccountNumberStatus activeNumberStatus = AccountNumberStatus.ACTIVE;
 
-		final PhoneDto phoneDto = new PhoneDto(
-			number,
-			accountHelper.findOperatorNetwork().getName(),
-			accountHelper.findActiveAccountNumberStatus().getName());
-
-		account.getNumbers()
-			.add(accountNumberRules
-				.createAccountNumber(phoneDto, accountHelper.findActiveAccountStatus().getName(), account));
+		final PhoneDto phoneDto = new PhoneDto(number, accountHelper.findOperatorNetwork().getName());
+		account.getNumbers().add(accountNumberRules.createAccountNumber(phoneDto, activeNumberStatus, account));
 
 		accountRepository.save(account);
 
@@ -58,7 +54,7 @@ public class AccountNumberRulesTest {
 	}
 
 	private Account createTestAccount() throws Exception {
-		return new Account("hash", accountHelper.findActiveAccountType(), accountHelper.findActiveAccountStatus(), 1L);
+		return new Account("hash", 0.0, AccountStatus.ACTIVE, 1L);
 	}
 
 }

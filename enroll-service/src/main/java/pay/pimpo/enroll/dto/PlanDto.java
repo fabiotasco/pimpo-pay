@@ -1,21 +1,23 @@
 
 package pay.pimpo.enroll.dto;
 
+import pay.pimpo.commons.entities.PlanType;
+
 public class PlanDto {
 
-	private final String name;
+	private final PlanType planType;
 
-	public PlanDto(final String name) {
-		this.name = name;
+	public PlanDto(final PlanType name) {
+		planType = name;
 	}
 
-	public String getName() {
-		return name;
+	public PlanType getName() {
+		return planType;
 	}
 
 	@Override
 	public String toString() {
-		return name;
+		return planType.name();
 	}
 
 }

@@ -5,7 +5,7 @@ import java.util.InputMismatchException;
 
 import org.springframework.stereotype.Component;
 
-import pay.pimpo.commons.dto.SupportedDocumentType;
+import pay.pimpo.commons.entities.DocumentType;
 import pay.pimpo.commons.exceptions.InvalidDocumentFormatException;
 
 /**
@@ -24,7 +24,7 @@ public class DocumentValidator {
 	 * @return Verdadeiro, se for o documento informado for válido. Falso, caso contrário.
 	 * @throws InvalidDocumentFormatException Quando o documento for inválido.
 	 */
-	public boolean validate(final String document, final SupportedDocumentType documentType)
+	public boolean validate(final String document, final DocumentType documentType)
 		throws InvalidDocumentFormatException {
 		switch (documentType) {
 			case CPF:

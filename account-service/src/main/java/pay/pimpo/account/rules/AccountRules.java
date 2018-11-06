@@ -1,26 +1,35 @@
 
 package pay.pimpo.account.rules;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import pay.pimpo.account.repositories.AccountRepository;
+import pay.pimpo.commons.api.Response;
+import pay.pimpo.commons.clients.UserClient;
 import pay.pimpo.commons.dto.CreateAccountDto;
 import pay.pimpo.commons.dto.DocumentDto;
-import pay.pimpo.commons.dto.SupportedDocumentType;
+import pay.pimpo.commons.dto.FetchAccountsDto;
+import pay.pimpo.commons.dto.FetchAccountsResponseDto;
 import pay.pimpo.commons.entities.Account;
+import pay.pimpo.commons.entities.AccountNumber;
+import pay.pimpo.commons.entities.AccountNumberStatus;
+import pay.pimpo.commons.entities.AccountPlan;
+import pay.pimpo.commons.entities.PlanType;
 import pay.pimpo.commons.entities.AccountStatus;
-import pay.pimpo.commons.entities.AccountType;
+import pay.pimpo.commons.exceptions.AccountNotEnrolledOnPlanException;
+import pay.pimpo.commons.exceptions.AccountNotFoundException;
+import pay.pimpo.commons.exceptions.ActiveAccountNumberNotFound;
 import pay.pimpo.commons.security.HashGenerator;
+import pay.pimpo.commons.validators.PhoneValidator;
 
 @Component
 public class AccountRules {
 
 	@Autowired
-	private AccountTypeRules accountTypeRules;
-
-	@Autowired
-	private AccountStatusRules accountStatusRules;
+	private AccountContractRules accountContractRules;
 
 	@Autowired
 	private AccountPlanRules accountPlanRules;
@@ -30,6 +39,12 @@ public class AccountRules {
 
 	@Autowired
 	private AccountRepository accountRepository;
+
+	@Autowired
+	private PhoneValidator phoneValidator;
+
+	@Autowired
+	private UserClient userClient;
 
 	/**
 	 * Cria uma nova conta.
@@ -41,19 +56,18 @@ public class AccountRules {
 	public Account createAccount(final CreateAccountDto createAccountDto) throws Exception {
 		accountNumberRules.checkAccountNumberActiveUniqueness(createAccountDto.getPhoneDto().getNumber());
 
-		final AccountType type = accountTypeRules.findAccountType(
-			SupportedDocumentType.getAssociatedAccountType(createAccountDto.getDocumentDto().getType()));
-
-		final AccountStatus status = accountStatusRules.findAccountStatus("Active");
-
 		final String hash = generateHash(createAccountDto.getDocumentDto());
 
-		final Account account = new Account(hash, type, status, createAccountDto.getUserId());
+		final Account account = new Account(hash, 0.0, AccountStatus.ACTIVE, createAccountDto.getUserId());
 
-		accountPlanRules.listAccountPlan().forEach(plan -> account.getPlans().add(plan));
+		account.getContracts().add(accountContractRules.createContract(createAccountDto.getDocumentDto(), account));
+
+		// XXX: Adiciona somente o tipo pré-pago, por enquanto...
+		account.getPlans().add(accountPlanRules.createPlan(account));
 
 		account.getNumbers()
-			.add(accountNumberRules.createAccountNumber(createAccountDto.getPhoneDto(), "Active", account));
+			.add(accountNumberRules
+				.createAccountNumber(createAccountDto.getPhoneDto(), AccountNumberStatus.ACTIVE, account));
 
 		accountRepository.save(account);
 
@@ -65,6 +79,66 @@ public class AccountRules {
 		final String salt = "@" + documentDto.getType();
 
 		return HashGenerator.generate(text, salt);
+	}
+
+	public Account findByUserId(final Long userId) throws AccountNotFoundException {
+		final Account account = accountRepository.findByUserId(userId);
+		if (account == null) {
+			throw new AccountNotFoundException();
+		}
+		return account;
+	}
+
+	public FetchAccountsResponseDto fetchAccounts(final FetchAccountsDto fetchAccountsDto) throws Exception {
+		final Account holderAccount = fetchHolderAccount(fetchAccountsDto);
+		final Account destinationAccount = fetchDestinationAccount(fetchAccountsDto);
+
+		checkAccountEnrollmentOnPlan(holderAccount, fetchAccountsDto.getPlanType());
+		checkAccountEnrollmentOnPlan(destinationAccount, fetchAccountsDto.getPlanType());
+
+		// TODO: HolderAccount tem que ser diferente de DestinationAccount - Validar!
+
+		return new FetchAccountsResponseDto(holderAccount, destinationAccount);
+	}
+
+	private Account fetchHolderAccount(final FetchAccountsDto fetchAccountsDto) throws Exception {
+		phoneValidator.validateNumber(fetchAccountsDto.getHolderAccountDto().getNumber());
+
+		final Account holderAccount = findByUserId(fetchAccountsDto.getUserId());
+		final AccountNumber holderAccountNumber = accountNumberRules.findActiveNumber(holderAccount.getNumbers());
+		if (!holderAccountNumber.getNumber().equals(fetchAccountsDto.getHolderAccountDto().getNumber())) {
+			throw new ActiveAccountNumberNotFound(fetchAccountsDto.getHolderAccountDto().getNumber());
+		}
+		return holderAccount;
+	}
+
+	private Account fetchDestinationAccount(final FetchAccountsDto fetchAccountsDto) throws Exception {
+		Account destinationAccount = null;
+		if (fetchAccountsDto.getDestinationAccountDto().getHash() != null) {
+			// Busca pelo Hash da conta
+			destinationAccount = accountRepository.findByHash(fetchAccountsDto.getDestinationAccountDto().getHash());
+
+		} else if (fetchAccountsDto.getDestinationAccountDto().getDocument() != null) {
+			// Busca pelo documento do cliente.
+			final Response<Long> response
+				= userClient.findByUsername(fetchAccountsDto.getDestinationAccountDto().getDocument());
+			if (response.isSuccess()) {
+				destinationAccount = findByUserId(response.getContent());
+			}
+		}
+		if (destinationAccount == null) {
+			throw new AccountNotFoundException();
+		}
+		return destinationAccount;
+	}
+
+	private void checkAccountEnrollmentOnPlan(final Account account, final PlanType planType)
+		throws AccountNotEnrolledOnPlanException {
+		final Optional<AccountPlan> optional
+			= account.getPlans().parallelStream().filter(plan -> plan.getPlanType() == planType).findAny();
+		if (!optional.isPresent()) {
+			throw new AccountNotEnrolledOnPlanException(account, planType);
+		}
 	}
 
 }

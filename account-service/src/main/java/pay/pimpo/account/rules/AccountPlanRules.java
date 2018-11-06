@@ -1,22 +1,17 @@
 
 package pay.pimpo.account.rules;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import pay.pimpo.account.repositories.AccountPlanRepository;
+import pay.pimpo.commons.entities.Account;
 import pay.pimpo.commons.entities.AccountPlan;
+import pay.pimpo.commons.entities.PlanType;
 
 @Component
 public class AccountPlanRules {
 
-	@Autowired
-	private AccountPlanRepository accountPlanRepository;
-
-	public List<AccountPlan> listAccountPlan() {
-		return accountPlanRepository.findAll();
+	public AccountPlan createPlan(final Account account) {
+		return new AccountPlan(PlanType.PREPAID, account);
 	}
 
 }

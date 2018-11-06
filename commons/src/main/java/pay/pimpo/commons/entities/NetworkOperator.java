@@ -8,12 +8,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Operadora de telefonia móvel, fixa ou de rede.
  *
  * @author fabio.tasco
  */
 @Entity
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class NetworkOperator implements Serializable {
 
 	private static final long serialVersionUID = -1156807457090825484L;

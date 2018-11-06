@@ -29,22 +29,22 @@ zuul:
     auth-service:
       path: /auth/**
       service-id: auth-service
-      sensitive-headers: Cookie,Set-Cookie
+      sensitive-headers:
       strip-prefix: false
     account-service:
       path: /accounts/**
       service-id: account-service
-      sensitive-headers: Cookie,Set-Cookie
+      sensitive-headers:
       strip-prefix: false
     enroll-service:
       path: /enroll/**
       service-id: enroll-service
-      sensitive-headers: Cookie,Set-Cookie
+      sensitive-headers:
       strip-prefix: false
     transaction-service:
-      path: /transaction/**
+      path: /transactions/**
       service-id: transaction-service
-      sensitive-headers: Cookie,Set-Cookie
+      sensitive-headers:
       strip-prefix: false
 
 # Hystrix

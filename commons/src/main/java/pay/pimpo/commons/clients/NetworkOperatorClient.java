@@ -7,13 +7,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import pay.pimpo.commons.api.Response;
 import pay.pimpo.commons.entities.NetworkOperator;
-import pay.pimpo.commons.exceptions.NetworkOperatorNotFoundException;
 
 @FeignClient(name = "network-operator-service", url = "${api.client.account-service.url}")
 public interface NetworkOperatorClient {
 
 	@GetMapping("/network-operators/{name}")
-	Response<NetworkOperator> findByName(@PathVariable("name") final String name)
-		throws NetworkOperatorNotFoundException;
+	Response<NetworkOperator> findByName(@PathVariable("name") final String name);
 
 }

@@ -23,15 +23,30 @@
  SET character_set_client = utf8mb4 ;
 CREATE TABLE IF NOT EXISTS `account` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `hash` varchar(256) NOT NULL,  
-  `type_id` int(11) NOT NULL,
-  `status_id` int(11) NOT NULL,
+  `hash` varchar(64) NOT NULL,
+  `balance` double(12,2) NOT NULL,
+  `status` varchar(55) NOT NULL,
   `user_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_status` (`status_id`),
-  KEY `fk_type` (`type_id`)
+  UNIQUE KEY `uk_hash` (`hash`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `account_contract`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+ SET character_set_client = utf8mb4 ;
+CREATE TABLE IF NOT EXISTS `account_contract` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `contract_type` varchar(55) NOT NULL,
+  `account_id` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_account` (`account_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Table structure for table `account_number`
@@ -41,28 +56,13 @@ CREATE TABLE IF NOT EXISTS `account` (
  SET character_set_client = utf8mb4 ;
 CREATE TABLE IF NOT EXISTS `account_number` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `number` varchar(14) DEFAULT NULL,
+  `number` varchar(14) NOT NULL,
+  `status` varchar(55) NOT NULL,
   `account_id` bigint(20) NOT NULL,
-  `operator_id` int(11) NOT NULL,
-  `status_id` int(11) NOT NULL,
+  `network_operator_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_account` (`account_id`),
-  KEY `fk_operator` (`operator_id`),
-  KEY `fk_status` (`status_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `account_number_status`
---
-
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE IF NOT EXISTS `account_number_status` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_name` (`name`)
+  KEY `fk_network_operator` (`network_operator_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -74,51 +74,10 @@ CREATE TABLE IF NOT EXISTS `account_number_status` (
  SET character_set_client = utf8mb4 ;
 CREATE TABLE IF NOT EXISTS `account_plan` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `account_plans`
---
-
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE IF NOT EXISTS `account_plans` (
+  `plan_type` varchar(55) NOT NULL,
   `account_id` bigint(20) NOT NULL,
-  `plan_id` int(11) NOT NULL,
-  KEY `fk_account` (`account_id`),
-  KEY `fk_plan` (`plan_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `account_status`
---
-
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE IF NOT EXISTS `account_status` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(15) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_name` (`name`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `account_type`
---
-
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
-CREATE TABLE IF NOT EXISTS `account_type` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(15) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_name` (`name`)
+  KEY `fk_account` (`account_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

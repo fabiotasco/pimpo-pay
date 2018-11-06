@@ -7,4 +7,8 @@ import pay.pimpo.commons.entities.Account;
 
 public interface AccountRepository extends JpaRepository<Account, Long> {
 
+	Account findByUserId(Long userid);
+
+	Account findByHash(String hash);
+
 }

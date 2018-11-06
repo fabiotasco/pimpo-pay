@@ -17,7 +17,7 @@ import pay.pimpo.commons.exceptions.NetworkOperatorNotFoundException;
 @RestController
 @ResponseStatus(HttpStatus.OK)
 @RequestMapping("/network-operators")
-public class NetworkOperatorController {
+class NetworkOperatorController {
 
 	@Autowired
 	private NetworkOperatorRules networkOperatorRules;

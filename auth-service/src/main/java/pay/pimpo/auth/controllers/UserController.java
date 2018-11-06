@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,11 +19,12 @@ import pay.pimpo.auth.rules.UserRules;
 import pay.pimpo.commons.api.Response;
 import pay.pimpo.commons.api.StandardErrors;
 import pay.pimpo.commons.dto.CreateUserDto;
+import pay.pimpo.commons.exceptions.UserNotFoundException;
 
 @RestController
 @ResponseStatus(HttpStatus.OK)
 @RequestMapping("/users")
-public class UserController {
+class UserController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
 
@@ -43,6 +45,11 @@ public class UserController {
 	@DeleteMapping("/{id}")
 	Response<Long> deleteUser(@PathVariable("id") final Long id) {
 		return new Response<>(userRules.deleteUser(id));
+	}
+
+	@GetMapping("/{username}")
+	Response<Long> findByUsername(@PathVariable("username") final String username) throws UserNotFoundException {
+		return new Response<>(userRules.findByUsername(username));
 	}
 
 }

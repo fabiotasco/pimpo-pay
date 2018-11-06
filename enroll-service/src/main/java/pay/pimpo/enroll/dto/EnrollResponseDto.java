@@ -4,39 +4,36 @@ package pay.pimpo.enroll.dto;
 import java.util.List;
 
 import pay.pimpo.commons.dto.PhoneDto;
+import pay.pimpo.commons.entities.AccountStatus;
 
 public class EnrollResponseDto {
 
 	private final String hash;
-	private final String accountType;
-	private final String accountStatus;
+	private final List<ContractDto> contracts;
 	private final List<PlanDto> plans;
 	private final List<PhoneDto> phones;
+	private final AccountStatus status;
 
 	public EnrollResponseDto(
 		final String hash,
-		final String accountType,
-		final String accountStatus,
+		final List<ContractDto> contracts,
 		final List<PlanDto> plans,
-		final List<PhoneDto> phones) {
+		final List<PhoneDto> phones,
+		final AccountStatus status) {
 
 		this.hash = hash;
-		this.accountType = accountType;
-		this.accountStatus = accountStatus;
+		this.contracts = contracts;
 		this.plans = plans;
 		this.phones = phones;
+		this.status = status;
 	}
 
 	public String getHash() {
 		return hash;
 	}
 
-	public String getAccountType() {
-		return accountType;
-	}
-
-	public String getAccountStatus() {
-		return accountStatus;
+	public List<ContractDto> getContracts() {
+		return contracts;
 	}
 
 	public List<PlanDto> getPlans() {
@@ -47,17 +44,21 @@ public class EnrollResponseDto {
 		return phones;
 	}
 
+	public AccountStatus getStatus() {
+		return status;
+	}
+
 	@Override
 	public String toString() {
 		return "EnrollResponseDto [hash=" + hash
-			+ ", accountType="
-			+ accountType
-			+ ", accountStatus="
-			+ accountStatus
+			+ ", contracts="
+			+ contracts
 			+ ", plans="
 			+ plans
 			+ ", phones="
 			+ phones
+			+ ", status="
+			+ status
 			+ "]";
 	}
 

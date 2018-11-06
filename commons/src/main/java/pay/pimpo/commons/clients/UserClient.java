@@ -3,6 +3,7 @@ package pay.pimpo.commons.clients;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,5 +19,8 @@ public interface UserClient {
 
 	@DeleteMapping("/users/{id}")
 	Response<Long> deleteUser(@PathVariable("id") Long id);
+
+	@GetMapping("/users/{username}")
+	Response<Long> findByUsername(@PathVariable("username") String username);
 
 }

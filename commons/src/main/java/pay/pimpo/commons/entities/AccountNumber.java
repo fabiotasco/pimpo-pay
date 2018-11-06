@@ -5,6 +5,8 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Números de telefone vinculados a uma conta.
@@ -19,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
  * @author fabio.tasco
  */
 @Entity
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class AccountNumber implements Serializable {
 
 	private static final long serialVersionUID = 5717761935751397319L;
@@ -27,15 +31,15 @@ public class AccountNumber implements Serializable {
 	@GeneratedValue
 	private Long id;
 
-	@Column(length = 14)
+	@Column(length = 14, nullable = false)
 	private String number;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false)
-	private NetworkOperator operator;
+	private NetworkOperator networkOperator;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(nullable = false)
+	@Enumerated(EnumType.STRING)
+	@Column(length = 55, nullable = false)
 	private AccountNumberStatus status;
 
 	@JsonBackReference
@@ -47,12 +51,12 @@ public class AccountNumber implements Serializable {
 
 	public AccountNumber(
 		final String number,
-		final NetworkOperator operator,
+		final NetworkOperator networkOperator,
 		final AccountNumberStatus status,
 		final Account account) {
 
 		this.number = number;
-		this.operator = operator;
+		this.networkOperator = networkOperator;
 		this.status = status;
 		this.account = account;
 	}
@@ -65,8 +69,8 @@ public class AccountNumber implements Serializable {
 		return number;
 	}
 
-	public NetworkOperator getOperator() {
-		return operator;
+	public NetworkOperator getNetworkOperator() {
+		return networkOperator;
 	}
 
 	public AccountNumberStatus getStatus() {
@@ -82,7 +86,7 @@ public class AccountNumber implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (number == null ? 0 : number.hashCode());
-		result = prime * result + (operator == null ? 0 : operator.hashCode());
+		result = prime * result + (networkOperator == null ? 0 : networkOperator.hashCode());
 		return result;
 	}
 
@@ -105,11 +109,11 @@ public class AccountNumber implements Serializable {
 		} else if (!number.equals(other.number)) {
 			return false;
 		}
-		if (operator == null) {
-			if (other.operator != null) {
+		if (networkOperator == null) {
+			if (other.networkOperator != null) {
 				return false;
 			}
-		} else if (!operator.equals(other.operator)) {
+		} else if (!networkOperator.equals(other.networkOperator)) {
 			return false;
 		}
 		return true;
@@ -121,7 +125,7 @@ public class AccountNumber implements Serializable {
 			+ ", number="
 			+ number
 			+ ", operator="
-			+ operator
+			+ networkOperator
 			+ ", status="
 			+ status
 			+ ", account="

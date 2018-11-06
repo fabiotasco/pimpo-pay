@@ -8,12 +8,11 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 /**
@@ -30,26 +29,26 @@ public class Account implements Serializable {
 	@GeneratedValue
 	private Long id;
 
-	@Column(nullable = false, length = 256, unique = true)
+	@Column(nullable = false, length = 64, unique = true)
 	private String hash;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(nullable = false)
-	private AccountType type;
+	@Column(nullable = false, precision = 12, scale = 2)
+	private Double balance;
 
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinTable(
-		name = "account_plans",
-		joinColumns = { @JoinColumn(name = "account_id", referencedColumnName = "id") },
-		inverseJoinColumns = { @JoinColumn(name = "plan_id", referencedColumnName = "id") })
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "account")
+	private List<AccountContract> contracts;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "account")
 	private List<AccountPlan> plans;
 
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "account")
 	private List<AccountNumber> numbers;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(nullable = false)
+	@Enumerated(EnumType.STRING)
+	@Column(length = 55, nullable = false)
 	private AccountStatus status;
+
+	// TODO: Criar o cadastro para ser merchant businessEnabled e limite de crédito e data de vencimento da fatura.
 
 	/** Chave lógica para a tabela User. */
 	@Column(nullable = false)
@@ -57,9 +56,10 @@ public class Account implements Serializable {
 
 	Account() {}
 
-	public Account(final String hash, final AccountType type, final AccountStatus status, final Long userId) {
+	public Account(final String hash, final Double balance, final AccountStatus status, final Long userId) {
 		this.hash = hash;
-		this.type = type;
+		this.balance = balance;
+		contracts = new ArrayList<>(1);
 		plans = new ArrayList<>(1);
 		numbers = new ArrayList<>(1);
 		this.status = status;
@@ -74,8 +74,16 @@ public class Account implements Serializable {
 		return hash;
 	}
 
-	public AccountType getType() {
-		return type;
+	public Double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(final Double balance) {
+		this.balance = balance;
+	}
+
+	public List<AccountContract> getContracts() {
+		return contracts;
 	}
 
 	public List<AccountPlan> getPlans() {
@@ -98,10 +106,7 @@ public class Account implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + (numbers == null ? 0 : numbers.hashCode());
 		result = prime * result + (hash == null ? 0 : hash.hashCode());
-		result = prime * result + (type == null ? 0 : type.hashCode());
-		result = prime * result + (userId == null ? 0 : userId.hashCode());
 		return result;
 	}
 
@@ -117,32 +122,11 @@ public class Account implements Serializable {
 			return false;
 		}
 		final Account other = (Account) obj;
-		if (numbers == null) {
-			if (other.numbers != null) {
-				return false;
-			}
-		} else if (!numbers.equals(other.numbers)) {
-			return false;
-		}
 		if (hash == null) {
 			if (other.hash != null) {
 				return false;
 			}
 		} else if (!hash.equals(other.hash)) {
-			return false;
-		}
-		if (type == null) {
-			if (other.type != null) {
-				return false;
-			}
-		} else if (!type.equals(other.type)) {
-			return false;
-		}
-		if (userId == null) {
-			if (other.userId != null) {
-				return false;
-			}
-		} else if (!userId.equals(other.userId)) {
 			return false;
 		}
 		return true;
@@ -153,14 +137,18 @@ public class Account implements Serializable {
 		return "Account [id=" + id
 			+ ", hash="
 			+ hash
-			+ ", type="
-			+ type
+			+ ", balance="
+			+ balance
+			+ ", contracts="
+			+ contracts
+			+ ", plans="
+			+ plans
+			+ ", numbers="
+			+ numbers
 			+ ", status="
 			+ status
 			+ ", userId="
 			+ userId
-			+ ", numbers="
-			+ numbers
 			+ "]";
 	}
 

@@ -13,15 +13,13 @@ import pay.pimpo.commons.entities.AccountNumber;
 import pay.pimpo.commons.entities.AccountNumberStatus;
 import pay.pimpo.commons.entities.NetworkOperator;
 import pay.pimpo.commons.exceptions.ActiveAccountNumberNotUniqueException;
+import pay.pimpo.commons.exceptions.NetworkOperatorNotFoundException;
 
 @Component
 public class AccountNumberRules {
 
 	@Autowired
 	private AccountNumberRepository accountNumberRepository;
-
-	@Autowired
-	private AccountNumberStatusRules accountNumberStatusRules;
 
 	@Autowired
 	private NetworkOperatorRules networkOperatorRules;
@@ -32,15 +30,14 @@ public class AccountNumberRules {
 	 * @param number Número da conta.
 	 * @param status Status da conta.
 	 * @return O número da conta com o status informado.
-	 * @throws Exception Caso a operador ou status informados não sejam encontrados.
+	 * @throws NetworkOperatorNotFoundException Caso a operador informados não seja encontrado.
 	 */
-	public AccountNumber createAccountNumber(final PhoneDto phoneDto, final String status, final Account account)
-		throws Exception {
+	public AccountNumber
+		createAccountNumber(final PhoneDto phoneDto, final AccountNumberStatus status, final Account account)
+			throws NetworkOperatorNotFoundException {
 
-		final AccountNumberStatus accountNumberStatus = accountNumberStatusRules.findByStatus(status);
 		final NetworkOperator networkOperator = networkOperatorRules.findByName(phoneDto.getNetworkOperator());
-
-		return new AccountNumber(phoneDto.getNumber(), networkOperator, accountNumberStatus, account);
+		return new AccountNumber(phoneDto.getNumber(), networkOperator, status, account);
 	}
 
 	/**
@@ -51,16 +48,24 @@ public class AccountNumberRules {
 	 * @Return Verdadeiro, se a conta for única.
 	 * @throws ActiveAccountNumberNotUniqueException Caso já exista uma conta com esse número ativado.
 	 */
-	public boolean checkAccountNumberActiveUniqueness(final String number) throws ActiveAccountNumberNotUniqueException {
+	public boolean checkAccountNumberActiveUniqueness(final String number)
+		throws ActiveAccountNumberNotUniqueException {
 		final List<AccountNumber> numbers = accountNumberRepository.findByNumber(number);
 		final long activeAccountNumbers = numbers.parallelStream()
-			.filter(accountNumber -> accountNumber.getStatus().getName().equals("Active"))
+			.filter(accountNumber -> accountNumber.getStatus() == AccountNumberStatus.ACTIVE)
 			.count();
 
 		if (activeAccountNumbers > 0) {
 			throw new ActiveAccountNumberNotUniqueException(number);
 		}
 		return true;
+	}
+
+	public AccountNumber findActiveNumber(final List<AccountNumber> numbers) {
+		return numbers.parallelStream()
+			.filter(accountNumber -> accountNumber.getStatus() == AccountNumberStatus.ACTIVE)
+			.findAny()
+			.get();
 	}
 
 }

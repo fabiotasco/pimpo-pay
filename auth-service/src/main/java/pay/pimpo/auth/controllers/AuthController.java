@@ -1,16 +1,19 @@
 
 package pay.pimpo.auth.controllers;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import pay.pimpo.auth.entities.User;
 import pay.pimpo.commons.api.Response;
 
 @RestController
-public class AuthController {
+@ResponseStatus(HttpStatus.OK)
+class AuthController {
 
 	@GetMapping("/authenticate")
 	Response<Long> authenticate() {

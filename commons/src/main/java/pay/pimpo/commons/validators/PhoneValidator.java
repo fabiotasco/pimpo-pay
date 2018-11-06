@@ -20,7 +20,7 @@ public class PhoneValidator {
 	 * @return Verdadeiro, se estiver no formato brasileiro. Falso, caso contrário.
 	 * @throws InvalidPhoneException Caso seja um número de telefone inválido.
 	 */
-	public boolean validatePhone(final String phone) throws InvalidPhoneException {
+	public boolean validateNumber(final String phone) throws InvalidPhoneException {
 		// Todos os telefones devem começar com o sinal de +
 		if (!phone.startsWith("+")) {
 			throw new InvalidPhoneException("Phone number must start with '+' sign: " + phone);

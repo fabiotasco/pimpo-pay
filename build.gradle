@@ -45,5 +45,5 @@ dependencies {
 	implementation project(':auth-service')
 	implementation project(':enroll-service')
 	implementation project(':account-service')
-	implementation project(':transactional-service')
+	implementation project(':transaction-service')
 }

@@ -11,6 +11,7 @@ import pay.pimpo.commons.clients.UserClient;
 import pay.pimpo.commons.dto.CreateAccountDto;
 import pay.pimpo.commons.dto.CreateUserDto;
 import pay.pimpo.commons.entities.Account;
+import pay.pimpo.commons.entities.NetworkOperator;
 import pay.pimpo.commons.exceptions.InvalidDocumentFormatException;
 import pay.pimpo.commons.exceptions.InvalidPhoneException;
 import pay.pimpo.commons.exceptions.NetworkOperatorNotFoundException;
@@ -37,7 +38,10 @@ public class EnrollRules {
 	private PhoneValidator phoneValidator;
 
 	public Response<Account> enroll(final EnrollDto enrollDto) throws Exception {
-		validateEnrollData(enrollDto);
+		final Response<NetworkOperator> validateResponse = validateEnrollData(enrollDto);
+		if (!validateResponse.isSuccess()) {
+			return new Response<>(validateResponse.getErrors());
+		}
 
 		// Cria o usuário
 		final Response<Long> createUserResponse = createUser(enrollDto);
@@ -55,14 +59,15 @@ public class EnrollRules {
 		return createAccountResponse;
 	}
 
-	private void validateEnrollData(final EnrollDto enrollDto)
+	private Response<NetworkOperator> validateEnrollData(final EnrollDto enrollDto)
 		throws InvalidDocumentFormatException,
 		InvalidPhoneException,
 		NetworkOperatorNotFoundException {
 
 		documentValidator.validate(enrollDto.getDocumentDto().getValue(), enrollDto.getDocumentDto().getType());
-		phoneValidator.validatePhone(enrollDto.getPhoneDto().getNumber());
-		networkOperatorClient.findByName(enrollDto.getPhoneDto().getNetworkOperator());
+		phoneValidator.validateNumber(enrollDto.getPhoneDto().getNumber());
+
+		return networkOperatorClient.findByName(enrollDto.getPhoneDto().getNetworkOperator());
 	}
 
 	private Response<Long> createUser(final EnrollDto enrollDto) throws Exception {
@@ -72,7 +77,7 @@ public class EnrollRules {
 		return userClient.createUser(createUserDto);
 	}
 
-	private Response<Account> createNewAccount(final EnrollDto enrollDto, final Long userId) {
+	private Response<Account> createNewAccount(final EnrollDto enrollDto, final Long userId) throws Exception {
 		final CreateAccountDto createAccountDto
 			= new CreateAccountDto(enrollDto.getDocumentDto(), enrollDto.getPhoneDto(), userId);
 

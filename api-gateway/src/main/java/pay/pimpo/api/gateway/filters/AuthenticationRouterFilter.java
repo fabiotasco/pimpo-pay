@@ -11,9 +11,10 @@ import com.netflix.zuul.exception.ZuulException;
 
 import feign.FeignException;
 import pay.pimpo.api.gateway.rules.AuthenticationRouterRules;
+import pay.pimpo.commons.api.Error;
 import pay.pimpo.commons.api.Response;
-import pay.pimpo.commons.exceptions.MicroserviceNotFoundException;
-import pay.pimpo.commons.exceptions.UnauthorizedAccessException;
+import pay.pimpo.commons.api.StandardErrors;
+import pay.pimpo.commons.clients.AuthClient;
 
 /**
  * Filtro que roteia a autenticação do usuário.
@@ -21,6 +22,8 @@ import pay.pimpo.commons.exceptions.UnauthorizedAccessException;
  * @author fabio.tasco
  */
 public class AuthenticationRouterFilter extends ZuulFilter {
+
+	public static final String ERROR_ATTRIBUTE = "ErrorAttribute";
 
 	private static final Logger LOG = LoggerFactory.getLogger(AuthenticationRouterFilter.class);
 
@@ -38,18 +41,21 @@ public class AuthenticationRouterFilter extends ZuulFilter {
 		try {
 			final Response<Long> response = authenticationRouterRules.routeAuthentication(context.getRequest());
 			if (response.isSuccess()) {
-				context.addZuulRequestHeader("x-user-id", response.getContent().toString());
+				context.addZuulRequestHeader(AuthClient.USER_ID_HEADER_KEY, response.getContent().toString());
 			}
 		} catch (final FeignException e) {
 			LOG.error("Error while routing authentication!", e);
 			if (e.status() == 404) {
-				throw new MicroserviceNotFoundException(e.getMessage());
-			}
-			if (e.status() == 401) {
-				throw new UnauthorizedAccessException();
+				addRequestAttributeError(context, StandardErrors.MICROSERVICE_NOT_FOUND);
+			} else if (e.status() == 401) {
+				addRequestAttributeError(context, StandardErrors.UNAUTHORIZED_ACCESS);
 			}
 		}
 		return context;
+	}
+
+	private void addRequestAttributeError(final RequestContext context, final Error error) {
+		context.getRequest().setAttribute(ERROR_ATTRIBUTE, error);
 	}
 
 	@Override

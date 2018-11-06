@@ -3,6 +3,8 @@ package pay.pimpo.commons.dto;
 
 import javax.validation.constraints.NotNull;
 
+import pay.pimpo.commons.entities.AccountNumberStatus;
+
 public class PhoneDto {
 
 	@NotNull
@@ -11,11 +13,16 @@ public class PhoneDto {
 	@NotNull
 	private String networkOperator;
 
-	private String status;
+	private AccountNumberStatus status;
 
 	PhoneDto() {}
 
-	public PhoneDto(final String number, final String networkOperator, final String status) {
+	public PhoneDto(final String number, final String networkOperator) {
+		this.number = number;
+		this.networkOperator = networkOperator;
+	}
+
+	public PhoneDto(final String number, final String networkOperator, final AccountNumberStatus status) {
 		this.number = number;
 		this.networkOperator = networkOperator;
 		this.status = status;
@@ -29,7 +36,7 @@ public class PhoneDto {
 		return networkOperator;
 	}
 
-	public String getStatus() {
+	public AccountNumberStatus getStatus() {
 		return status;
 	}
 
