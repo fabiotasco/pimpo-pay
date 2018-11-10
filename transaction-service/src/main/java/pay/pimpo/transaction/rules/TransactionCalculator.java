@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import pay.pimpo.commons.entities.Account;
 import pay.pimpo.commons.entities.PlanType;
 import pay.pimpo.commons.exceptions.InsufficientFundsException;
-import pay.pimpo.transaction.dto.TransactionDto;
 
 @Component
 public class TransactionCalculator {
@@ -14,33 +13,27 @@ public class TransactionCalculator {
 	/**
 	 * Verifica se a conta possui fundos de acordo com o tipo de transação.
 	 *
-	 * @param transactionDto Dados da transação.
 	 * @param account Conta sensibilizada.
+	 * @param amount Valor da transação.
+	 * @param planType Tipo do plano.
 	 * @return Verdadeiro, se tiver fundos.
-	 * @throws InsufficientFundsException Quando não houver fundos para transações do tipo
-	 *         {@link PlanType#PREPAID}.
+	 * @throws InsufficientFundsException Quando não houver fundos para transações do tipo {@link PlanType#PREPAID}.
 	 */
-	public boolean checkForFunds(final TransactionDto transactionDto, final Account account)
+	public boolean checkForFunds(final Account account, final Double amount, final PlanType planType)
 		throws InsufficientFundsException {
-		switch (transactionDto.getPlan()) {
+		switch (planType) {
 			case PREPAID:
-				return checkBalance(transactionDto, account);
+				return checkBalance(account, amount);
 			case CREDIT:
 				// TODO: Implementar checkCreditLimit(transactionDto, account);
 			default:
-				throw new UnsupportedOperationException(
-					"Operation not available for plan: " + transactionDto.getPlan());
+				throw new UnsupportedOperationException("Operation not available for plan: " + planType);
 		}
 	}
 
-	private boolean checkBalance(final TransactionDto transactionDto, final Account account)
-		throws InsufficientFundsException {
-
-		final Double balance = account.getBalance();
-		final Double amount = transactionDto.getAmount();
-
-		if (balance.compareTo(amount) == -1) {
-			throw new InsufficientFundsException(transactionDto.getAmount(), account);
+	private boolean checkBalance(final Account account, final Double amount) throws InsufficientFundsException {
+		if (account.getBalance().compareTo(amount) == -1) {
+			throw new InsufficientFundsException(account, amount);
 		}
 		return true;
 	}

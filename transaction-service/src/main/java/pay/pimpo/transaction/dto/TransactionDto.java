@@ -9,9 +9,9 @@ import javax.validation.constraints.PositiveOrZero;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 
+import pay.pimpo.commons.entities.PlanType;
 import pay.pimpo.commons.dto.DestinationAccountDto;
 import pay.pimpo.commons.dto.HolderAccountDto;
-import pay.pimpo.commons.entities.PlanType;
 import pay.pimpo.commons.entities.CurrencyType;
 
 public class TransactionDto {

@@ -11,7 +11,7 @@ public class InsufficientFundsException extends PimpoPayException {
 	private final Double amount;
 	private final Account account;
 
-	public InsufficientFundsException(final Double amount, final Account account) {
+	public InsufficientFundsException(final Account account, final Double amount) {
 		super(
 			String
 				.format("Insufficient funds for transaction amount of %.2f for account %s", amount, account.getHash()),

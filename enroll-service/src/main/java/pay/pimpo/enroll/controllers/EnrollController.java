@@ -27,7 +27,6 @@ public class EnrollController {
 
 	@PostMapping("/enrollment")
 	public Response<EnrollResponseDto> enrollment(@RequestBody final EnrollDto enrollDto) throws Exception {
-		// TODO: Testar novo enrollment
 		final Response<Account> response = enrollRules.enroll(enrollDto);
 		if (response.isSuccess()) {
 			return new Response<>(enrollResponseDtoConverter.convert(response.getContent()));

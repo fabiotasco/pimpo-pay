@@ -1,5 +1,5 @@
 
-package pay.pimpo.transaction.entities;
+package pay.pimpo.commons.entities;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -14,9 +14,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import pay.pimpo.commons.builders.TransactionEventBuilder;
 
 @Entity
 public class TransactionEvent implements Serializable {
@@ -29,46 +30,33 @@ public class TransactionEvent implements Serializable {
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 55)
-	private TransactionType type;
-
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false, length = 55)
 	private TransactionStatus status;
+
+	@Column(length = 8)
+	private String reasonCode;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date createdAt;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = false)
-	private Date updatedAt;
-
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(nullable = false)
 	private Transaction transaction;
 
+	/**
+	 * Utilizar o Builder!
+	 *
+	 * @see TransactionEventBuilder
+	 */
 	public TransactionEvent() {}
 
 	@PrePersist
 	public void prePersist() {
-		createdAt = updatedAt = new Date();
-	}
-
-	@PreUpdate
-	public void preUpdate() {
-		updatedAt = new Date();
+		createdAt = new Date();
 	}
 
 	public Long getId() {
 		return id;
-	}
-
-	public TransactionType getType() {
-		return type;
-	}
-
-	public void setType(final TransactionType type) {
-		this.type = type;
 	}
 
 	public TransactionStatus getStatus() {
@@ -79,12 +67,16 @@ public class TransactionEvent implements Serializable {
 		this.status = status;
 	}
 
-	public Date getCreatedAt() {
-		return createdAt;
+	public String getReasonCode() {
+		return reasonCode;
 	}
 
-	public Date getUpdatedAt() {
-		return updatedAt;
+	public void setReasonCode(final String reasonCode) {
+		this.reasonCode = reasonCode;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
 	}
 
 	public Transaction getTransaction() {
@@ -99,9 +91,9 @@ public class TransactionEvent implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + (reasonCode == null ? 0 : reasonCode.hashCode());
 		result = prime * result + (status == null ? 0 : status.hashCode());
 		result = prime * result + (transaction == null ? 0 : transaction.hashCode());
-		result = prime * result + (type == null ? 0 : type.hashCode());
 		return result;
 	}
 
@@ -117,6 +109,13 @@ public class TransactionEvent implements Serializable {
 			return false;
 		}
 		final TransactionEvent other = (TransactionEvent) obj;
+		if (reasonCode == null) {
+			if (other.reasonCode != null) {
+				return false;
+			}
+		} else if (!reasonCode.equals(other.reasonCode)) {
+			return false;
+		}
 		if (status != other.status) {
 			return false;
 		}
@@ -127,23 +126,18 @@ public class TransactionEvent implements Serializable {
 		} else if (!transaction.equals(other.transaction)) {
 			return false;
 		}
-		if (type != other.type) {
-			return false;
-		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
 		return "TransactionEvent [id=" + id
-			+ ", type="
-			+ type
 			+ ", status="
 			+ status
+			+ ", reasonCode="
+			+ reasonCode
 			+ ", createdAt="
 			+ createdAt
-			+ ", updatedAt="
-			+ updatedAt
 			+ ", transaction="
 			+ transaction
 			+ "]";

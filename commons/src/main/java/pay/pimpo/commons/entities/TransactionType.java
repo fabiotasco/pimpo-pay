@@ -1,5 +1,5 @@
 
-package pay.pimpo.transaction.entities;
+package pay.pimpo.commons.entities;
 
 public enum TransactionType {
 
@@ -19,9 +19,6 @@ public enum TransactionType {
 	WITHDRAWAL,
 
 	/** Recarga de celular */
-	MOBILE_RECHARGE,
-
-	/** Cancelamento de transação */
-	CANCEL;
+	MOBILE_RECHARGE;
 
 }

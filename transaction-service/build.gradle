@@ -40,6 +40,7 @@ dependencies {
 	runtimeOnly('mysql:mysql-connector-java')
 	
 	implementation project(':commons')
+	implementation project(':hazelcast-configuration')
 	
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 }

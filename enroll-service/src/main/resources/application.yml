@@ -3,24 +3,9 @@ spring:
   profiles: default
   application:
     name: enroll-service
-  datasource:
-    url: jdbc:mysql://localhost:3306/enroll?useSSL=false
-    username: root
-    password: 12345678
-    driver-class-name: com.mysql.jdbc.Driver
-    tomcat:
-      test-while-idle: true
-      validation-query: SELECT 1
-    initialization-mode: never
-    platform: mysql
-  jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
-    hibernate:
-      naming:
-        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-      ddl-auto: none
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: America/Sao_Paulo
 
 # Server
 server:
@@ -38,10 +23,12 @@ eureka:
 # Clients
 api:
   client:
-    account-service:
-      url: localhost:9010/accounts
     auth-service:
       url: localhost:9000/auth
+    account-service:
+      url: localhost:9010/accounts
+    transaction-service:
+      url: localhost:9030/transactions
 
 # Log
 logging:

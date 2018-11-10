@@ -50,12 +50,18 @@ public class StandardErrors {
 	public static final Error ACTIVE_ACCOUNT_NUMBER_NOT_FOUND
 		= new ErrorBuilder().setCode("ACT-0011").setMessage("Active account number not found!").build();
 
+	public static final Error ACCOUNT_NOT_ACTIVE
+		= new ErrorBuilder().setCode("ACT-0012").setMessage("Account not active!").build();
+
 	// Transaction errors
+	public static final Error TRANSACTION_NOT_FOUND
+		= new ErrorBuilder().setCode("TRX-0001").setMessage("Transaction not found!").build();
+
 	public static final Error INVALID_TRANSACTION_MERCHANT_DTO_DATA
-		= new ErrorBuilder().setCode("TRX-0001").setMessage("Merchant data is missing!").build();
+		= new ErrorBuilder().setCode("TRX-0002").setMessage("Merchant data is missing!").build();
 
 	public static final Error INSUFFICIENT_FUNDS
-		= new ErrorBuilder().setCode("TRX-0002").setMessage("Insufficient funds!").build();
+		= new ErrorBuilder().setCode("TRX-0003").setMessage("Insufficient funds!").build();
 
 	// Environment errors
 	public static final Error MICROSERVICE_NOT_FOUND

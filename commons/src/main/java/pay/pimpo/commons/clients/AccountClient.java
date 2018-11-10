@@ -2,8 +2,6 @@
 package pay.pimpo.commons.clients;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -11,6 +9,7 @@ import pay.pimpo.commons.api.Response;
 import pay.pimpo.commons.dto.CreateAccountDto;
 import pay.pimpo.commons.dto.FetchAccountsDto;
 import pay.pimpo.commons.dto.FetchAccountsResponseDto;
+import pay.pimpo.commons.dto.TransferBalanceDto;
 import pay.pimpo.commons.entities.Account;
 
 /**
@@ -23,10 +22,10 @@ public interface AccountClient {
 	@PostMapping("/create-account")
 	Response<Account> createAccount(@RequestBody final CreateAccountDto createAccountDto);
 
-	@GetMapping("/{userId}")
-	Response<Account> findByUserId(@PathVariable("userId") final Long userId);
-
 	@PostMapping("/fetch-accounts")
 	Response<FetchAccountsResponseDto> fetchAccounts(@RequestBody FetchAccountsDto fetchAccountsDto);
+
+	@PostMapping("/transfer-balance")
+	Response<Void> transferBalance(@RequestBody TransferBalanceDto updateBalanceDto);
 
 }

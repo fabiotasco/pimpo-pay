@@ -1,7 +1,7 @@
 
 package pay.pimpo.transaction.dto;
 
-import pay.pimpo.transaction.entities.TransactionStatus;
+import pay.pimpo.commons.entities.TransactionStatus;
 
 public class TransactionResponseDto {
 

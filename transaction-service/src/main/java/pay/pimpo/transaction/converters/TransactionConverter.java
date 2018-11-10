@@ -4,19 +4,25 @@ package pay.pimpo.transaction.converters;
 import org.springframework.stereotype.Component;
 
 import pay.pimpo.commons.entities.Account;
+import pay.pimpo.commons.entities.Transaction;
+import pay.pimpo.commons.entities.TransactionType;
 import pay.pimpo.transaction.dto.TransactionDto;
-import pay.pimpo.transaction.entities.Transaction;
 
 @Component
 public class TransactionConverter {
 
-	public Transaction
-		convert(final TransactionDto transactionDto, final Account holderAccount, final Account destinationAccount) {
+	public Transaction convert(
+		final TransactionDto transactionDto,
+		final TransactionType transactionType,
+		final Account holderAccount,
+		final Account destinationAccount) {
+
 		return new Transaction(
-			transactionDto.getAmount(),
-			transactionDto.getInstallments(),
 			transactionDto.getDate(),
+			transactionDto.getAmount(),
 			transactionDto.getCurrency(),
+			transactionDto.getInstallments(),
+			transactionType,
 			transactionDto.getPlan(),
 			holderAccount.getId(),
 			destinationAccount.getId());

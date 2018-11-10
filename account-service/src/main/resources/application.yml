@@ -23,6 +23,9 @@ spring:
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
       ddl-auto: none
       use-new-id-generator-mappings: false
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: America/Sao_Paulo
   # Spring Cloud tem conflitos de referência circular com Spring Data Source
   # https://github.com/spring-cloud/spring-cloud-commons/issues/355
   cloud:
@@ -45,10 +48,12 @@ eureka:
 # Clients
 api:
   client:
-    account-service:
-      url: localhost:9010/accounts
     auth-service:
       url: localhost:9000/auth
+    account-service:
+      url: localhost:9010/accounts
+    transaction-service:
+      url: localhost:9030/transactions
       
 # Log
 logging:

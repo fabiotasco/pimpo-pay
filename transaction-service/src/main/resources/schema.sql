@@ -25,13 +25,14 @@ USE `transaction`;
  SET character_set_client = utf8mb4 ;
 CREATE TABLE IF NOT EXISTS `transaction` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `date` datetime NOT NULL,
   `amount` double(12,2) NOT NULL,
   `currency_type` varchar(3) NOT NULL,
-  `date` datetime NOT NULL,
+  `installments` int(11) NOT NULL,
+  `type` varchar(55) NOT NULL,
+  `plan_type` varchar(55) NOT NULL,
   `destination_account_id` bigint(20) NOT NULL,
   `holder_account_id` bigint(20) NOT NULL,
-  `installments` int(11) NOT NULL,
-  `plan_type` varchar(55) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -44,10 +45,9 @@ CREATE TABLE IF NOT EXISTS `transaction` (
  SET character_set_client = utf8mb4 ;
 CREATE TABLE IF NOT EXISTS `transaction_event` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `created_at` datetime NOT NULL,
   `status` varchar(55) NOT NULL,
-  `type` varchar(55) NOT NULL,
-  `updated_at` datetime NOT NULL,
+  `reason_code` varchar(8) NULL,
+  `created_at` datetime NOT NULL,
   `transaction_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_transaction` (`transaction_id`)

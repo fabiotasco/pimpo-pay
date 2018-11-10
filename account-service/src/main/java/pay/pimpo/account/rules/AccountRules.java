@@ -13,12 +13,14 @@ import pay.pimpo.commons.dto.CreateAccountDto;
 import pay.pimpo.commons.dto.DocumentDto;
 import pay.pimpo.commons.dto.FetchAccountsDto;
 import pay.pimpo.commons.dto.FetchAccountsResponseDto;
+import pay.pimpo.commons.dto.TransferBalanceDto;
 import pay.pimpo.commons.entities.Account;
 import pay.pimpo.commons.entities.AccountNumber;
 import pay.pimpo.commons.entities.AccountNumberStatus;
 import pay.pimpo.commons.entities.AccountPlan;
-import pay.pimpo.commons.entities.PlanType;
 import pay.pimpo.commons.entities.AccountStatus;
+import pay.pimpo.commons.entities.PlanType;
+import pay.pimpo.commons.exceptions.AccountNotActiveException;
 import pay.pimpo.commons.exceptions.AccountNotEnrolledOnPlanException;
 import pay.pimpo.commons.exceptions.AccountNotFoundException;
 import pay.pimpo.commons.exceptions.ActiveAccountNumberNotFound;
@@ -62,7 +64,7 @@ public class AccountRules {
 
 		account.getContracts().add(accountContractRules.createContract(createAccountDto.getDocumentDto(), account));
 
-		// XXX: Adiciona somente o tipo pré-pago, por enquanto...
+		// XXX: Será adicionado somente o tipo pré-pago, por enquanto...
 		account.getPlans().add(accountPlanRules.createPlan(account));
 
 		account.getNumbers()
@@ -81,10 +83,13 @@ public class AccountRules {
 		return HashGenerator.generate(text, salt);
 	}
 
-	public Account findByUserId(final Long userId) throws AccountNotFoundException {
+	public Account findActiveAccountByUserId(final Long userId) throws Exception {
 		final Account account = accountRepository.findByUserId(userId);
 		if (account == null) {
 			throw new AccountNotFoundException();
+		}
+		if (account.getStatus() != AccountStatus.ACTIVE) {
+			throw new AccountNotActiveException(account.getHash());
 		}
 		return account;
 	}
@@ -104,7 +109,7 @@ public class AccountRules {
 	private Account fetchHolderAccount(final FetchAccountsDto fetchAccountsDto) throws Exception {
 		phoneValidator.validateNumber(fetchAccountsDto.getHolderAccountDto().getNumber());
 
-		final Account holderAccount = findByUserId(fetchAccountsDto.getUserId());
+		final Account holderAccount = findActiveAccountByUserId(fetchAccountsDto.getUserId());
 		final AccountNumber holderAccountNumber = accountNumberRules.findActiveNumber(holderAccount.getNumbers());
 		if (!holderAccountNumber.getNumber().equals(fetchAccountsDto.getHolderAccountDto().getNumber())) {
 			throw new ActiveAccountNumberNotFound(fetchAccountsDto.getHolderAccountDto().getNumber());
@@ -123,7 +128,7 @@ public class AccountRules {
 			final Response<Long> response
 				= userClient.findByUsername(fetchAccountsDto.getDestinationAccountDto().getDocument());
 			if (response.isSuccess()) {
-				destinationAccount = findByUserId(response.getContent());
+				destinationAccount = findActiveAccountByUserId(response.getContent());
 			}
 		}
 		if (destinationAccount == null) {
@@ -134,11 +139,40 @@ public class AccountRules {
 
 	private void checkAccountEnrollmentOnPlan(final Account account, final PlanType planType)
 		throws AccountNotEnrolledOnPlanException {
+
 		final Optional<AccountPlan> optional
 			= account.getPlans().parallelStream().filter(plan -> plan.getPlanType() == planType).findAny();
 		if (!optional.isPresent()) {
 			throw new AccountNotEnrolledOnPlanException(account, planType);
 		}
+	}
+
+	public Void transferBalance(final TransferBalanceDto transferBalanceDto) throws Exception {
+		// Debita a conta do portador
+		sumAmount(transferBalanceDto.getHolderAccountId(), -transferBalanceDto.getAmount());
+		// Credita a conta destino.
+		sumAmount(transferBalanceDto.getDestinationAccountId(), +transferBalanceDto.getAmount());
+
+		return null;
+	}
+
+	private void sumAmount(final Long id, final Double amount) throws Exception {
+		final Account holderAccount = findActiveAccountById(id);
+		holderAccount.setBalance(holderAccount.getBalance().doubleValue() + amount.doubleValue());
+
+		accountRepository.save(holderAccount);
+	}
+
+	private Account findActiveAccountById(final Long id) throws Exception {
+		final Optional<Account> optional = accountRepository.findById(id);
+		if (!optional.isPresent()) {
+			throw new AccountNotFoundException();
+		}
+		final Account account = optional.get();
+		if (account.getStatus() != AccountStatus.ACTIVE) {
+			throw new AccountNotActiveException(account.getHash());
+		}
+		return optional.get();
 	}
 
 }

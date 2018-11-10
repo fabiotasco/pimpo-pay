@@ -1,0 +1,17 @@
+apply plugin: 'java-library'
+apply plugin: 'eclipse'
+
+group = 'pay.pimpo'
+version = '1.0.0'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+
+dependencies {
+	implementation('com.hazelcast:hazelcast:3.11')
+	implementation('com.hazelcast:hazelcast-spring:3.11')
+	implementation('org.springframework:spring-context:5.1.2.RELEASE')
+}

@@ -1,5 +1,5 @@
 
-package pay.pimpo.transaction.entities;
+package pay.pimpo.commons.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -17,9 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import pay.pimpo.commons.entities.CurrencyType;
-import pay.pimpo.commons.entities.PlanType;
-
 @Entity
 public class Transaction implements Serializable {
 
@@ -29,19 +26,23 @@ public class Transaction implements Serializable {
 	@GeneratedValue
 	private Long id;
 
-	@Column(nullable = false, precision = 12, scale = 2)
-	private Double amount;
-
-	@Column(nullable = false)
-	private Integer installments;
-
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private Date date;
 
+	@Column(nullable = false, precision = 12, scale = 2)
+	private Double amount;
+
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 3)
 	private CurrencyType currencyType;
+
+	@Column(nullable = false)
+	private Integer installments;
+
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false, length = 55)
+	private TransactionType type;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 55)
@@ -61,18 +62,20 @@ public class Transaction implements Serializable {
 	Transaction() {}
 
 	public Transaction(
-		final Double amount,
-		final Integer installments,
 		final Date date,
+		final Double amount,
 		final CurrencyType currencyType,
+		final Integer installments,
+		final TransactionType type,
 		final PlanType planType,
 		final Long holderAccountId,
 		final Long destinationAccountId) {
 
-		this.amount = amount;
-		this.installments = installments;
 		this.date = date;
+		this.amount = amount;
 		this.currencyType = currencyType;
+		this.installments = installments;
+		this.type = type;
 		this.planType = planType;
 		this.holderAccountId = holderAccountId;
 		this.destinationAccountId = destinationAccountId;
@@ -83,20 +86,24 @@ public class Transaction implements Serializable {
 		return id;
 	}
 
+	public Date getDate() {
+		return date;
+	}
+
 	public Double getAmount() {
 		return amount;
+	}
+
+	public CurrencyType getCurrencyType() {
+		return currencyType;
 	}
 
 	public Integer getInstallments() {
 		return installments;
 	}
 
-	public Date getDate() {
-		return date;
-	}
-
-	public CurrencyType getCurrencyType() {
-		return currencyType;
+	public TransactionType getType() {
+		return type;
 	}
 
 	public PlanType getPlanType() {
@@ -121,10 +128,12 @@ public class Transaction implements Serializable {
 		int result = 1;
 		result = prime * result + (amount == null ? 0 : amount.hashCode());
 		result = prime * result + (currencyType == null ? 0 : currencyType.hashCode());
+		result = prime * result + (date == null ? 0 : date.hashCode());
 		result = prime * result + (destinationAccountId == null ? 0 : destinationAccountId.hashCode());
 		result = prime * result + (holderAccountId == null ? 0 : holderAccountId.hashCode());
 		result = prime * result + (installments == null ? 0 : installments.hashCode());
 		result = prime * result + (planType == null ? 0 : planType.hashCode());
+		result = prime * result + (type == null ? 0 : type.hashCode());
 		return result;
 	}
 
@@ -148,6 +157,13 @@ public class Transaction implements Serializable {
 			return false;
 		}
 		if (currencyType != other.currencyType) {
+			return false;
+		}
+		if (date == null) {
+			if (other.date != null) {
+				return false;
+			}
+		} else if (!date.equals(other.date)) {
 			return false;
 		}
 		if (destinationAccountId == null) {
@@ -174,20 +190,25 @@ public class Transaction implements Serializable {
 		if (planType != other.planType) {
 			return false;
 		}
+		if (type != other.type) {
+			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
 		return "Transaction [id=" + id
-			+ ", amount="
-			+ amount
-			+ ", installments="
-			+ installments
 			+ ", date="
 			+ date
+			+ ", amount="
+			+ amount
 			+ ", currencyType="
 			+ currencyType
+			+ ", installments="
+			+ installments
+			+ ", type="
+			+ type
 			+ ", planType="
 			+ planType
 			+ ", holderAccountId="
