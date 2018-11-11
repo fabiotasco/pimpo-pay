@@ -6,8 +6,8 @@ public enum TransactionType {
 	/** Compra */
 	PURCHASE,
 
-	/** Creditar conta corrente */
-	CREDIT,
+	/** Depósito na conta corrente */
+	DEPOSIT,
 
 	/** Transferência entre contas */
 	TRANSFER,

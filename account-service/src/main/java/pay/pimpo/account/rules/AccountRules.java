@@ -13,6 +13,7 @@ import pay.pimpo.commons.dto.CreateAccountDto;
 import pay.pimpo.commons.dto.DocumentDto;
 import pay.pimpo.commons.dto.FetchAccountsDto;
 import pay.pimpo.commons.dto.FetchAccountsResponseDto;
+import pay.pimpo.commons.dto.FetchHolderAccountDto;
 import pay.pimpo.commons.dto.TransferBalanceDto;
 import pay.pimpo.commons.entities.Account;
 import pay.pimpo.commons.entities.AccountNumber;
@@ -95,7 +96,8 @@ public class AccountRules {
 	}
 
 	public FetchAccountsResponseDto fetchAccounts(final FetchAccountsDto fetchAccountsDto) throws Exception {
-		final Account holderAccount = fetchHolderAccount(fetchAccountsDto);
+		final Account holderAccount = fetchHolderAccount(
+			new FetchHolderAccountDto(fetchAccountsDto.getHolderAccountDto(), fetchAccountsDto.getUserId()));
 		final Account destinationAccount = fetchDestinationAccount(fetchAccountsDto);
 
 		checkAccountEnrollmentOnPlan(holderAccount, fetchAccountsDto.getPlanType());
@@ -106,13 +108,13 @@ public class AccountRules {
 		return new FetchAccountsResponseDto(holderAccount, destinationAccount);
 	}
 
-	private Account fetchHolderAccount(final FetchAccountsDto fetchAccountsDto) throws Exception {
-		phoneValidator.validateNumber(fetchAccountsDto.getHolderAccountDto().getNumber());
+	public Account fetchHolderAccount(final FetchHolderAccountDto fetchHolderAccountDto) throws Exception {
+		phoneValidator.validateNumber(fetchHolderAccountDto.getHolderAccountDto().getNumber());
 
-		final Account holderAccount = findActiveAccountByUserId(fetchAccountsDto.getUserId());
+		final Account holderAccount = findActiveAccountByUserId(fetchHolderAccountDto.getUserId());
 		final AccountNumber holderAccountNumber = accountNumberRules.findActiveNumber(holderAccount.getNumbers());
-		if (!holderAccountNumber.getNumber().equals(fetchAccountsDto.getHolderAccountDto().getNumber())) {
-			throw new ActiveAccountNumberNotFound(fetchAccountsDto.getHolderAccountDto().getNumber());
+		if (!holderAccountNumber.getNumber().equals(fetchHolderAccountDto.getHolderAccountDto().getNumber())) {
+			throw new ActiveAccountNumberNotFound(fetchHolderAccountDto.getHolderAccountDto().getNumber());
 		}
 		return holderAccount;
 	}
@@ -156,11 +158,13 @@ public class AccountRules {
 		return null;
 	}
 
-	private void sumAmount(final Long id, final Double amount) throws Exception {
+	public Void sumAmount(final Long id, final Double amount) throws Exception {
 		final Account holderAccount = findActiveAccountById(id);
 		holderAccount.setBalance(holderAccount.getBalance().doubleValue() + amount.doubleValue());
 
 		accountRepository.save(holderAccount);
+
+		return null;
 	}
 
 	private Account findActiveAccountById(final Long id) throws Exception {

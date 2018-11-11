@@ -11,7 +11,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IQueue;
 
 import pay.pimpo.clearing.rules.ClearingRules;
-import pay.pimpo.commons.entities.TransactionEvent;
+import pay.pimpo.commons.entities.Transaction;
 import pay.pimpo.configurations.HazelcastConfiguration;
 
 @Component
@@ -19,7 +19,7 @@ public class ClearingQueueConsumer implements CommandLineRunner {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ClearingQueueConsumer.class);
 
-	private final IQueue<TransactionEvent> clearingQueue;
+	private final IQueue<Transaction> clearingQueue;
 
 	@Autowired
 	private ClearingRules clearingRules;

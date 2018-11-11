@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -16,6 +17,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Transaction implements Serializable {
@@ -56,7 +59,8 @@ public class Transaction implements Serializable {
 	@Column(nullable = false)
 	private Long destinationAccountId;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "transaction")
+	@JsonBackReference
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "transaction", cascade = { CascadeType.PERSIST })
 	private List<TransactionEvent> events;
 
 	Transaction() {}

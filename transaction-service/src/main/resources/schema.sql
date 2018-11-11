@@ -28,11 +28,11 @@ CREATE TABLE IF NOT EXISTS `transaction` (
   `date` datetime NOT NULL,
   `amount` double(12,2) NOT NULL,
   `currency_type` varchar(3) NOT NULL,
-  `installments` int(11) NOT NULL,
+  `installments` int(11) NULL,
   `type` varchar(55) NOT NULL,
   `plan_type` varchar(55) NOT NULL,
-  `destination_account_id` bigint(20) NOT NULL,
   `holder_account_id` bigint(20) NOT NULL,
+  `destination_account_id` bigint(20) NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;

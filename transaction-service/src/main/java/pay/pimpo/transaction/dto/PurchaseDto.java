@@ -14,7 +14,7 @@ import pay.pimpo.commons.dto.DestinationAccountDto;
 import pay.pimpo.commons.dto.HolderAccountDto;
 import pay.pimpo.commons.entities.CurrencyType;
 
-public class TransactionDto {
+public class PurchaseDto {
 
 	@NotNull
 	private Date date;
@@ -41,7 +41,7 @@ public class TransactionDto {
 	@JsonAlias("holderAccount")
 	private HolderAccountDto hodlerAccountDto;
 
-	TransactionDto() {}
+	PurchaseDto() {}
 
 	public Date getDate() {
 		return date;
