@@ -63,6 +63,15 @@ public class StandardErrors {
 	public static final Error INSUFFICIENT_FUNDS
 		= new ErrorBuilder().setCode("TRX-0003").setMessage("Insufficient funds!").build();
 
+	public static final Error TRANSACTION_NOT_CANCELLABLE
+		= new ErrorBuilder().setCode("TRX-0004").setMessage("Transaction not cancellable!").build();
+
+	public static final Error TRANSACTION_NOT_CANCELLABLE_BY_USER
+		= new ErrorBuilder().setCode("TRX-0005").setMessage("Transaction not cancellable by user!").build();
+
+	public static final Error TRANSACTION_ALREADY_CANCELLED
+		= new ErrorBuilder().setCode("TRX-0006").setMessage("Transaction already cancelled!").build();
+
 	// Environment errors
 	public static final Error MICROSERVICE_NOT_FOUND
 		= new ErrorBuilder().setCode("ENV-0001").setMessage("Microservice not found!").build();

@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import pay.pimpo.commons.entities.Transaction;
+import pay.pimpo.commons.entities.TransactionEvent;
+import pay.pimpo.commons.entities.TransactionStatus;
 import pay.pimpo.commons.entities.TransactionType;
+import pay.pimpo.commons.utils.TransactionUtils;
 
 @Component
 public class ClearingRules {
@@ -42,7 +45,19 @@ public class ClearingRules {
 				"Clearing not supported for transaction type: " + transaction.getType()))
 			.getValue();
 
-		clearingStrategy.run(transaction);
+		if (isCancel(transaction)) {
+			clearingStrategy.cancel(transaction);
+		} else {
+			clearingStrategy.clear(transaction);
+		}
+	}
+
+	private boolean isCancel(final Transaction transaction) {
+		final TransactionEvent event = TransactionUtils.getMostRecentEvent(transaction);
+		if (event == null) {
+			return false;
+		}
+		return event.getStatus() == TransactionStatus.CANCELLED;
 	}
 
 }

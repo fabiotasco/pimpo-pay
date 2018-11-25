@@ -14,7 +14,7 @@ public enum TransactionStatus {
 	DENIED,
 
 	/** Cancelada */
-	CANCELED,
+	CANCELLED,
 
 	/** Liquidada */
 	SETTLED,

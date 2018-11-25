@@ -16,11 +16,16 @@ public class DepositClearingStrategy extends ClearingStrategy {
 	private AccountClient accountClient;
 
 	@Override
-	public void run(final Transaction transaction) {
+	public void clear(final Transaction transaction) {
 		final Response<Void> response
 			= accountClient.sumAmount(new SumAmountDto(transaction.getHolderAccountId(), transaction.getAmount()));
 
 		addTransactionEvent(transaction, response);
+	}
+
+	@Override
+	public void cancel(final Transaction transaction) {
+		accountClient.sumAmount(new SumAmountDto(transaction.getHolderAccountId(), -transaction.getAmount()));
 	}
 
 }

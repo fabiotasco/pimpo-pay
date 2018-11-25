@@ -14,7 +14,19 @@ abstract class ClearingStrategy {
 	@Autowired
 	private TransactionClient transactionClient;
 
-	abstract void run(Transaction transaction);
+	/**
+	 * Liquida uma transação.
+	 *
+	 * @param transaction
+	 */
+	abstract void clear(Transaction transaction);
+
+	/**
+	 * Cancela a transação.
+	 *
+	 * @param transaction
+	 */
+	abstract void cancel(Transaction transaction);
 
 	/**
 	 * Adiciona um evento de acordo com a resposta.

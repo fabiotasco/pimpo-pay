@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -24,6 +25,7 @@ import pay.pimpo.transaction.dto.DepositDto;
 import pay.pimpo.transaction.dto.PurchaseDto;
 import pay.pimpo.transaction.dto.StatementDto;
 import pay.pimpo.transaction.dto.TransactionResponseDto;
+import pay.pimpo.transaction.rules.CancelRules;
 import pay.pimpo.transaction.rules.DepositRules;
 import pay.pimpo.transaction.rules.PurchaseRules;
 import pay.pimpo.transaction.rules.StatementRules;
@@ -45,6 +47,9 @@ class TransactionController {
 	@Autowired
 	private TransactionRules transactionRules;
 
+	@Autowired
+	private CancelRules cancelRules;
+
 	@PostMapping("/purchase")
 	Response<TransactionResponseDto> purchase(
 		@RequestBody @Valid final PurchaseDto transactionDto,
@@ -63,10 +68,13 @@ class TransactionController {
 		return depositRules.process(depositDto, userId);
 	}
 
-	@DeleteMapping("/transaction/{transactionId}/cancel")
-	Response<TransactionResponseDto> cancel() {
-		// TODO: Implementar!
-		return null;
+	@DeleteMapping("/{transactionId}/cancel")
+	Response<TransactionResponseDto> cancel(
+		@PathVariable("transactionId") final Long transactionId,
+		@RequestHeader(AuthClient.USER_ID_HEADER_KEY) final Long userId)
+		throws Exception {
+
+		return cancelRules.process(transactionId, userId);
 	}
 
 	/** Extrato bancário */

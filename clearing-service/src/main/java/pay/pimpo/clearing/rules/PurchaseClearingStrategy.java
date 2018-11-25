@@ -16,7 +16,7 @@ public class PurchaseClearingStrategy extends ClearingStrategy {
 	private AccountClient accountClient;
 
 	@Override
-	public void run(final Transaction transaction) {
+	public void clear(final Transaction transaction) {
 		switch (transaction.getPlanType()) {
 			case PREPAID:
 				clearPrepaidPurchase(transaction);
@@ -37,6 +37,27 @@ public class PurchaseClearingStrategy extends ClearingStrategy {
 			transaction.getAmount()));
 
 		addTransactionEvent(transaction, response);
+	}
+
+	@Override
+	public void cancel(final Transaction transaction) {
+		switch (transaction.getPlanType()) {
+			case PREPAID:
+				cancelPrepaidPurchase(transaction);
+				break;
+			case CREDIT:
+				// TODO: Implementar a liquidação do crédito!
+			default:
+				throw new UnsupportedOperationException(
+					"Purchase cancel not supported for plan: " + transaction.getPlanType());
+		}
+	}
+
+	private void cancelPrepaidPurchase(final Transaction transaction) {
+		accountClient.transferBalance(new TransferBalanceDto(
+			transaction.getHolderAccountId(),
+			transaction.getDestinationAccountId(),
+			-transaction.getAmount()));
 	}
 
 }
