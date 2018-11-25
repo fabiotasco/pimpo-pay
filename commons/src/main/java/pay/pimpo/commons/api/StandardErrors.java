@@ -72,6 +72,10 @@ public class StandardErrors {
 	public static final Error TRANSACTION_ALREADY_CANCELLED
 		= new ErrorBuilder().setCode("TRX-0006").setMessage("Transaction already cancelled!").build();
 
+	public static final Error TRANSACTION_BETWEEN_SAME_ACCOUNT_NOT_ALLOWED = new ErrorBuilder().setCode("TRX-0007")
+		.setMessage("Transactions between the same account are not allowed!")
+		.build();
+
 	// Environment errors
 	public static final Error MICROSERVICE_NOT_FOUND
 		= new ErrorBuilder().setCode("ENV-0001").setMessage("Microservice not found!").build();

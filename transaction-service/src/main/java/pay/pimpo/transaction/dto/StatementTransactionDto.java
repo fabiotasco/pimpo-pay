@@ -14,6 +14,7 @@ import pay.pimpo.commons.entities.TransactionType;
 @JsonInclude(Include.NON_EMPTY)
 public class StatementTransactionDto {
 
+	private final Long id;
 	private final Date date;
 	private final Double amount;
 	private final CurrencyType currencyType;
@@ -24,6 +25,7 @@ public class StatementTransactionDto {
 	private final String reasonCode;
 
 	public StatementTransactionDto(
+		final Long id,
 		final Date date,
 		final Double amount,
 		final CurrencyType currencyType,
@@ -33,6 +35,7 @@ public class StatementTransactionDto {
 		final TransactionStatus status,
 		final String reasonCode) {
 
+		this.id = id;
 		this.date = date;
 		this.amount = amount;
 		this.currencyType = currencyType;
@@ -41,6 +44,10 @@ public class StatementTransactionDto {
 		this.planType = planType;
 		this.status = status;
 		this.reasonCode = reasonCode;
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public Date getDate() {
@@ -77,7 +84,9 @@ public class StatementTransactionDto {
 
 	@Override
 	public String toString() {
-		return "StatementTransactionDto [date=" + date
+		return "StatementTransactionDto [id=" + id
+			+ ", date="
+			+ date
 			+ ", amount="
 			+ amount
 			+ ", currencyType="

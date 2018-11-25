@@ -103,8 +103,6 @@ public class AccountRules {
 		checkAccountEnrollmentOnPlan(holderAccount, fetchAccountsDto.getPlanType());
 		checkAccountEnrollmentOnPlan(destinationAccount, fetchAccountsDto.getPlanType());
 
-		// TODO: HolderAccount tem que ser diferente de DestinationAccount - Validar!
-
 		return new FetchAccountsResponseDto(holderAccount, destinationAccount);
 	}
 

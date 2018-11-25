@@ -18,6 +18,7 @@ import pay.pimpo.commons.entities.TransactionStatus;
 import pay.pimpo.commons.entities.TransactionType;
 import pay.pimpo.commons.exceptions.InsufficientFundsException;
 import pay.pimpo.commons.exceptions.InvalidTransactionMerchantDtoDataException;
+import pay.pimpo.commons.exceptions.TransactionBetweenSameAccountNotAllowedException;
 import pay.pimpo.configurations.HazelcastConfiguration;
 import pay.pimpo.transaction.converters.TransactionConverter;
 import pay.pimpo.transaction.dto.PurchaseDto;
@@ -57,8 +58,12 @@ public class PurchaseRules {
 		if (!fetchAccountsResponse.isSuccess()) {
 			return new Response<>(fetchAccountsResponse.getErrors());
 		}
-
 		final Account holderAccount = fetchAccountsResponse.getContent().getHolderAccount();
+		final Account destinationAccount = fetchAccountsResponse.getContent().getDestinationAccount();
+		// As contas não podem ser iguais em uma compra!
+		if (holderAccount.equals(destinationAccount)) {
+			throw new TransactionBetweenSameAccountNotAllowedException(holderAccount);
+		}
 
 		final Transaction transaction = transactionConverter.convert(purchaseDto,
 			TransactionType.PURCHASE,
