@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import pay.pimpo.commons.api.Response;
 import pay.pimpo.commons.dto.CreateUserDto;
+import pay.pimpo.commons.dto.LoginDto;
 
 @FeignClient(name = "user-service", url = "${api.client.auth-service.url}")
 public interface UserClient {
@@ -22,5 +23,8 @@ public interface UserClient {
 
 	@GetMapping("/users/{username}")
 	Response<Long> findByUsername(@PathVariable("username") String username);
+
+	@PostMapping("/users/login")
+	Response<Long> login(@RequestBody final LoginDto loginDto);
 
 }

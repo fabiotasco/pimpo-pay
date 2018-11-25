@@ -4,6 +4,7 @@ package pay.pimpo.account.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -55,10 +56,9 @@ class AccountController {
 		return new Response<>(accountRules.sumAmount(sumAmountDto.getAccountId(), sumAmountDto.getAmount()));
 	}
 
-	@GetMapping("/pan/{pan}/balance")
-	Response<Void> getBalance() {
-		// TODO: Implementar
-		return null;
+	@GetMapping("/{userId}")
+	Response<Account> findByUserId(@PathVariable("userId") final Long userId) throws Exception {
+		return new Response<>(accountRules.findActiveAccountByUserId(userId));
 	}
 
 }

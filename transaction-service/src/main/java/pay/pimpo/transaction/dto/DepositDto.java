@@ -6,7 +6,7 @@ import java.util.Date;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import pay.pimpo.commons.dto.HolderAccountDto;
 import pay.pimpo.commons.entities.CurrencyType;
@@ -24,7 +24,7 @@ public class DepositDto {
 	private CurrencyType currency;
 
 	@NotNull
-	@JsonAlias("holderAccount")
+	@JsonProperty("holderAccount")
 	private HolderAccountDto hodlerAccountDto;
 
 	DepositDto() {}

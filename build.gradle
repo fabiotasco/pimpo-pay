@@ -42,7 +42,7 @@ dependencies {
 	implementation project(':discovery-server')
 	implementation project(':api-gateway')
 	implementation project(':auth-service')
-	implementation project(':enroll-service')
+	implementation project(':access-service')
 	implementation project(':account-service')
 	implementation project(':transaction-service')
 	implementation project(':clearing-service')

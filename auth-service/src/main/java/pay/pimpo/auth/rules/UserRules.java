@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import pay.pimpo.auth.entities.User;
 import pay.pimpo.auth.repositories.UserRepository;
+import pay.pimpo.commons.dto.LoginDto;
 import pay.pimpo.commons.exceptions.UserNotFoundException;
 
 @Component
@@ -40,6 +41,18 @@ public class UserRules {
 		final User user = userRepository.findByUsername(username);
 		if (user == null) {
 			throw new UserNotFoundException(username);
+		}
+		return user.getId();
+	}
+
+	public Long login(final LoginDto loginDto) throws UserNotFoundException {
+		final User user = userRepository.findByUsername(loginDto.getUsername());
+		if (user == null) {
+			throw new UserNotFoundException(loginDto.getUsername());
+		}
+		final boolean passwordMatcher = encoder.matches(loginDto.getPassword(), user.getPassword());
+		if (!passwordMatcher) {
+			throw new UserNotFoundException(loginDto.getUsername());
 		}
 		return user.getId();
 	}

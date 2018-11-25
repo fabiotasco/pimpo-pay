@@ -50,8 +50,9 @@ public class AuthenticationRouterFilter extends ZuulFilter {
 			} else if (e.status() == 401) {
 				addRequestAttributeError(context, StandardErrors.UNAUTHORIZED_ACCESS);
 			}
+			throw new RuntimeException("Error while routing authentication!");
 		}
-		return context;
+		return null;
 	}
 
 	private void addRequestAttributeError(final RequestContext context, final Error error) {

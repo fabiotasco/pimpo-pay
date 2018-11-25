@@ -39,9 +39,9 @@ zuul:
       service-id: account-service
       sensitive-headers:
       strip-prefix: false
-    enroll-service:
-      path: /enroll/**
-      service-id: enroll-service
+    access-service:
+      path: /access/**
+      service-id: access-service
       sensitive-headers:
       strip-prefix: false
     transaction-service:
@@ -49,15 +49,13 @@ zuul:
       service-id: transaction-service
       sensitive-headers:
       strip-prefix: false
-
-# Hystrix
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeout-in-milliseconds: 1000000
+      
+# Ribbon Timeout
+ribbon:
+  read-timeout: 10000
+  connect-timeout: 50000
+  max-auto-retries: 3
+  max-auto-retries-next-server: 6
 
 # Clients
 api:

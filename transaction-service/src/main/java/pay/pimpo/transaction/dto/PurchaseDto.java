@@ -7,12 +7,12 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import pay.pimpo.commons.entities.PlanType;
 import pay.pimpo.commons.dto.DestinationAccountDto;
 import pay.pimpo.commons.dto.HolderAccountDto;
 import pay.pimpo.commons.entities.CurrencyType;
+import pay.pimpo.commons.entities.PlanType;
 
 public class PurchaseDto {
 
@@ -34,11 +34,11 @@ public class PurchaseDto {
 	private Integer installments;
 
 	@NotNull
-	@JsonAlias("destinationAccount")
+	@JsonProperty("destinationAccount")
 	private DestinationAccountDto destinationAccountDto;
 
 	@NotNull
-	@JsonAlias("holderAccount")
+	@JsonProperty("holderAccount")
 	private HolderAccountDto hodlerAccountDto;
 
 	PurchaseDto() {}

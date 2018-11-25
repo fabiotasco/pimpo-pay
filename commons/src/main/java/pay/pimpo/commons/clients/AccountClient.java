@@ -2,6 +2,8 @@
 package pay.pimpo.commons.clients;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -35,5 +37,8 @@ public interface AccountClient {
 
 	@PostMapping("/sum-amount")
 	Response<Void> sumAmount(@RequestBody SumAmountDto sumAmountDto);
+
+	@GetMapping("/{userId}")
+	Response<Account> findByUserId(@PathVariable("userId") final Long userId);
 
 }

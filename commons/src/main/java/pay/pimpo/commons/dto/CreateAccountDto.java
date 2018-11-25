@@ -1,19 +1,19 @@
 
 package pay.pimpo.commons.dto;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * DTO usado para a criação de novas contas.
- * 
+ *
  * @author fabio.tasco
  */
 public class CreateAccountDto {
 
-	@JsonAlias("document")
+	@JsonProperty("document")
 	private DocumentDto documentDto;
 
-	@JsonAlias("phone")
+	@JsonProperty("phone")
 	private PhoneDto phoneDto;
 
 	private Long userId;

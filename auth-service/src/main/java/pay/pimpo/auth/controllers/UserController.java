@@ -19,6 +19,7 @@ import pay.pimpo.auth.rules.UserRules;
 import pay.pimpo.commons.api.Response;
 import pay.pimpo.commons.api.StandardErrors;
 import pay.pimpo.commons.dto.CreateUserDto;
+import pay.pimpo.commons.dto.LoginDto;
 import pay.pimpo.commons.exceptions.UserNotFoundException;
 
 @RestController
@@ -50,6 +51,11 @@ class UserController {
 	@GetMapping("/{username}")
 	Response<Long> findByUsername(@PathVariable("username") final String username) throws UserNotFoundException {
 		return new Response<>(userRules.findByUsername(username));
+	}
+
+	@PostMapping("/login")
+	Response<Long> login(@RequestBody final LoginDto loginDto) throws UserNotFoundException {
+		return new Response<>(userRules.login(loginDto));
 	}
 
 }
