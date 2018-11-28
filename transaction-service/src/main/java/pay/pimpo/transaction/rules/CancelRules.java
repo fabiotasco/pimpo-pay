@@ -62,6 +62,9 @@ public class CancelRules {
 		if (!isCancellableByUser(transaction, userId)) {
 			throw new TransactionNotCancellableByUserException(transaction, userId);
 		}
+
+		// TODO: Impedir que o usuário cancele um depósito que deixe o saldo dele negativo!
+
 		final TransactionEvent event
 			= new TransactionEventBuilder().setStatus(TransactionStatus.CANCELLED).setTransaction(transaction).build();
 
