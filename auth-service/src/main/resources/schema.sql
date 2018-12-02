@@ -1,3 +1,6 @@
+CREATE DATABASE IS NOT EXISTS `auth`;
+USE `auth`;
+
 -- MySQL dump 10.13  Distrib 8.0.12, for macos10.13 (x86_64)
 --
 -- Host: localhost    Database: auth
