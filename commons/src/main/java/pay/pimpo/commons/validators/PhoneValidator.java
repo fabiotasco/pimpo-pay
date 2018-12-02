@@ -13,6 +13,8 @@ import pay.pimpo.commons.exceptions.InvalidPhoneException;
 @Component
 public class PhoneValidator {
 
+	private static final char PLUS_SIGN = '+';
+
 	/**
 	 * Valida o formato de telefone brasileiro: +55DDxxxxxyyyy.
 	 *
@@ -22,7 +24,7 @@ public class PhoneValidator {
 	 */
 	public boolean validateNumber(final String phone) throws InvalidPhoneException {
 		// Todos os telefones devem começar com o sinal de +
-		if (phone.charAt(0) != '+') {
+		if (phone.charAt(0) != PLUS_SIGN) {
 			throw new InvalidPhoneException("Phone number must start with '+' sign: " + phone);
 		}
 		if (phone.length() != 14) {

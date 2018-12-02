@@ -11,7 +11,7 @@ import pay.pimpo.commons.exceptions.InvalidPhoneException;
 public class PhoneValidatorTest {
 
 	private static final String VALID_PHONE = "+5511987654321";
-	private PhoneValidator phoneValidator;
+	private transient PhoneValidator phoneValidator;
 
 	@Before
 	public void before() {
