@@ -45,10 +45,12 @@ eureka:
 # Clients
 api:
   client:
-    account-service:
-      url: localhost:9010/accounts
     auth-service:
       url: localhost:9000/auth
+    account-service:
+      url: localhost:9010/accounts
+    transaction-service:
+      url: localhost:9030/transactions
       
 # Log
 logging:

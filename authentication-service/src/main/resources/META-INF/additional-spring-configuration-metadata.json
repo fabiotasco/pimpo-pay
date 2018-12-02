@@ -1,9 +1,0 @@
-{
-	"properties": [
-		{
-			"name": "authentication.check-user-scopes",
-			"type": "java.lang.String",
-			"description": "Verifica o escopo de usuário."
-		}
-	]
-}

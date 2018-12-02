@@ -7,6 +7,7 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
+
 jar {
 	baseName = 'pimpo-pay-solution'
 	version = "${version}"
@@ -22,6 +23,7 @@ def javaProjects() {
 allprojects {
 	apply plugin: 'java'
 	apply plugin: 'eclipse'
+	apply plugin: 'jacoco'
 
 	sourceCompatibility = 1.8
 	targetCompatibility = 1.8
@@ -36,6 +38,21 @@ allprojects {
 		jcenter()
 		mavenCentral()
 	}
+	
+	/* JaCoCo */
+	jacoco {
+	    toolVersion = "0.8.2"
+	    reportsDir = file("$buildDir/customJacocoReportDir")
+	}
+	
+	jacocoTestReport {
+	    reports {
+	        xml.enabled = true
+	        csv.enabled = false
+	        html.enabled = false
+	    }
+	}
+	test.finalizedBy jacocoTestReport
 }
 
 dependencies {

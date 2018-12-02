@@ -42,6 +42,9 @@ dependencies {
 	implementation project(':commons')
 	implementation project(':hazelcast-configuration')
 	
+	implementation('com.hazelcast:hazelcast:3.11')
+	implementation('com.hazelcast:hazelcast-spring:3.11')
+	
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 }
 
