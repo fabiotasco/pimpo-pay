@@ -12,7 +12,7 @@ public class ApiUtils {
 		final StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < split.length; i++) {
 			if (i > 0) {
-				sb.append(" ");
+				sb.append(' ');
 			}
 			sb.append(split[i].substring(0, 1).toUpperCase());
 			sb.append(split[i].substring(1, split[i].length()).toLowerCase());

@@ -22,7 +22,7 @@ public class PhoneValidator {
 	 */
 	public boolean validateNumber(final String phone) throws InvalidPhoneException {
 		// Todos os telefones devem começar com o sinal de +
-		if (!phone.startsWith("+")) {
+		if (phone.charAt(0) != '+') {
 			throw new InvalidPhoneException("Phone number must start with '+' sign: " + phone);
 		}
 		if (phone.length() != 14) {

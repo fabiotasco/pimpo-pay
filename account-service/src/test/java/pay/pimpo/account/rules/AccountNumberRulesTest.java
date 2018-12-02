@@ -1,6 +1,8 @@
 
 package pay.pimpo.account.rules;
 
+import static org.junit.Assert.assertTrue;
+
 import javax.transaction.Transactional;
 
 import org.junit.Before;
@@ -50,7 +52,8 @@ public class AccountNumberRulesTest {
 
 		accountRepository.save(account);
 
-		accountNumberRules.checkAccountNumberActiveUniqueness(number);
+		final boolean accountNumberActiveIsUnique = accountNumberRules.checkAccountNumberActiveUniqueness(number);
+		assertTrue(accountNumberActiveIsUnique);
 	}
 
 	private Account createTestAccount() throws Exception {
