@@ -50,22 +50,49 @@ public class AccountNumberRules {
 	 */
 	public boolean checkAccountNumberActiveUniqueness(final String number)
 		throws ActiveAccountNumberNotUniqueException {
-		final List<AccountNumber> numbers = accountNumberRepository.findByNumber(number);
-		final long activeAccountNumbers = numbers.parallelStream()
-			.filter(accountNumber -> accountNumber.getStatus() == AccountNumberStatus.ACTIVE)
-			.count();
+		final List<AccountNumber> accountNumbers = accountNumberRepository.findByNumber(number);
+		final long activeAccountNumbersCounter = countActiveAccountNumbers(accountNumbers);
 
-		if (activeAccountNumbers > 0) {
+		if (activeAccountNumbersCounter > 0) {
 			throw new ActiveAccountNumberNotUniqueException(number);
 		}
 		return true;
 	}
 
-	public AccountNumber findActiveNumber(final List<AccountNumber> numbers) {
-		return numbers.parallelStream()
+	/**
+	 * Conta a quantidade de número ativos na conta.
+	 *
+	 * @param accountNumbers Lista com os números da conta.
+	 * @return
+	 */
+	private long countActiveAccountNumbers(final List<AccountNumber> accountNumbers) {
+		return accountNumbers.parallelStream()
+			.filter(accountNumber -> accountNumber.getStatus() == AccountNumberStatus.ACTIVE)
+			.count();
+	}
+
+	/**
+	 * Busca um número ativo da conta.
+	 *
+	 * @param accountNumbers Lista de contas.
+	 * @return O número ativo.
+	 */
+	public AccountNumber getActiveNumber(final List<AccountNumber> accountNumbers) {
+		return accountNumbers.parallelStream()
 			.filter(accountNumber -> accountNumber.getStatus() == AccountNumberStatus.ACTIVE)
 			.findAny()
 			.get();
+	}
+
+	/**
+	 * Consulta a conta com o número ativo.
+	 *
+	 * @param number Número da conta.
+	 * @return A conta com número ativo.
+	 */
+	public AccountNumber findActiveAccountNumber(final String number) {
+		final List<AccountNumber> numbers = accountNumberRepository.findByNumber(number);
+		return getActiveNumber(numbers);
 	}
 
 }

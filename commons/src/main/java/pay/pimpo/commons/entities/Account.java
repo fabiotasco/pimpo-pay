@@ -15,12 +15,15 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Conta corrente.
  *
  * @author fabio.tasco
  */
 @Entity
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Account implements Serializable {
 
 	private static final long serialVersionUID = 7820574512444005096L;

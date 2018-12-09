@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import pay.pimpo.account.repositories.AccountRepository;
-import pay.pimpo.commons.api.Response;
-import pay.pimpo.commons.clients.UserClient;
 import pay.pimpo.commons.dto.CreateAccountDto;
 import pay.pimpo.commons.dto.DocumentDto;
 import pay.pimpo.commons.dto.FetchAccountsDto;
@@ -45,9 +43,6 @@ public class AccountRules {
 
 	@Autowired
 	private PhoneValidator phoneValidator;
-
-	@Autowired
-	private UserClient userClient;
 
 	/**
 	 * Cria uma nova conta.
@@ -110,7 +105,7 @@ public class AccountRules {
 		phoneValidator.validateNumber(fetchHolderAccountDto.getHolderAccountDto().getNumber());
 
 		final Account holderAccount = findActiveAccountByUserId(fetchHolderAccountDto.getUserId());
-		final AccountNumber holderAccountNumber = accountNumberRules.findActiveNumber(holderAccount.getNumbers());
+		final AccountNumber holderAccountNumber = accountNumberRules.getActiveNumber(holderAccount.getNumbers());
 		if (!holderAccountNumber.getNumber().equals(fetchHolderAccountDto.getHolderAccountDto().getNumber())) {
 			throw new ActiveAccountNumberNotFound(fetchHolderAccountDto.getHolderAccountDto().getNumber());
 		}
@@ -123,12 +118,12 @@ public class AccountRules {
 			// Busca pelo Hash da conta
 			destinationAccount = accountRepository.findByHash(fetchAccountsDto.getDestinationAccountDto().getHash());
 
-		} else if (fetchAccountsDto.getDestinationAccountDto().getDocument() != null) {
-			// Busca pelo documento do cliente.
-			final Response<Long> response
-				= userClient.findByUsername(fetchAccountsDto.getDestinationAccountDto().getDocument());
-			if (response.isSuccess()) {
-				destinationAccount = findActiveAccountByUserId(response.getContent());
+		} else if (fetchAccountsDto.getDestinationAccountDto().getNumber() != null) {
+			// Busca pelo número do cliente.
+			final AccountNumber accountNumber
+				= accountNumberRules.findActiveAccountNumber(fetchAccountsDto.getDestinationAccountDto().getNumber());
+			if (accountNumber != null) {
+				destinationAccount = accountNumber.getAccount();
 			}
 		}
 		if (destinationAccount == null) {

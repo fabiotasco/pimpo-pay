@@ -14,7 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * Números de telefone vinculados a uma conta.
@@ -22,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author fabio.tasco
  */
 @Entity
-@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class AccountNumber implements Serializable {
 
 	private static final long serialVersionUID = 5717761935751397319L;

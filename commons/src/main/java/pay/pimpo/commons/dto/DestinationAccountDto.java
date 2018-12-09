@@ -4,8 +4,7 @@ package pay.pimpo.commons.dto;
 public class DestinationAccountDto {
 
 	private String hash;
-	// TODO: Alterar o document por number!
-	private String document;
+	private String number;
 
 	DestinationAccountDto() {}
 
@@ -13,13 +12,13 @@ public class DestinationAccountDto {
 		return hash;
 	}
 
-	public String getDocument() {
-		return document;
+	public String getNumber() {
+		return number;
 	}
 
 	@Override
 	public String toString() {
-		return "MerchantDto [hash=" + hash + ", document=" + document + "]";
+		return "DestinationAccountDto [hash=" + hash + ", number=" + number + "]";
 	}
 
 }

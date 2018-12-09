@@ -17,8 +17,10 @@ import pay.pimpo.commons.entities.Transaction;
 import pay.pimpo.commons.entities.TransactionStatus;
 import pay.pimpo.commons.entities.TransactionType;
 import pay.pimpo.commons.exceptions.InsufficientFundsException;
+import pay.pimpo.commons.exceptions.InvalidPhoneException;
 import pay.pimpo.commons.exceptions.InvalidTransactionMerchantDtoDataException;
 import pay.pimpo.commons.exceptions.TransactionBetweenSameAccountNotAllowedException;
+import pay.pimpo.commons.validators.PhoneValidator;
 import pay.pimpo.configurations.HazelcastConfiguration;
 import pay.pimpo.transaction.converters.TransactionConverter;
 import pay.pimpo.transaction.dto.PurchaseDto;
@@ -42,6 +44,9 @@ public class PurchaseRules {
 
 	@Autowired
 	private HazelcastInstance hazelcastInstance;
+
+	@Autowired
+	private PhoneValidator phoneValidator;
 
 	public Response<TransactionResponseDto> process(final PurchaseDto purchaseDto, final Long userId) throws Exception {
 		if (!validateFields(purchaseDto)) {
@@ -88,9 +93,16 @@ public class PurchaseRules {
 		}
 	}
 
-	private boolean validateFields(final PurchaseDto transactionDto) throws InvalidTransactionMerchantDtoDataException {
-		return isNotBlank(transactionDto.getDestinationAccountDto().getDocument())
-			|| isNotBlank(transactionDto.getDestinationAccountDto().getHash());
+	private boolean validateFields(final PurchaseDto transactionDto) throws InvalidPhoneException {
+		if (isNotBlank(transactionDto.getDestinationAccountDto().getHash())) {
+			return true;
+		}
+
+		final String number = transactionDto.getDestinationAccountDto().getNumber();
+		if (isNotBlank(number) && phoneValidator.validateNumber(number)) {
+			return true;
+		}
+		return false;
 	}
 
 	private boolean isNotBlank(final String field) {

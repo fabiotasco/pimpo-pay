@@ -52,10 +52,10 @@ zuul:
       
 # Ribbon Timeout
 ribbon:
-  read-timeout: 10000
-  connect-timeout: 50000
-  max-auto-retries: 3
-  max-auto-retries-next-server: 6
+  read-timeout: 100000
+  connect-timeout: 500000
+  max-auto-retries: 5
+  max-auto-retries-next-server: 20
 
 # Clients
 api:
