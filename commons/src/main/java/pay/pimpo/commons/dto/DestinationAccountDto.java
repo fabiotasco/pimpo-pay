@@ -4,6 +4,7 @@ package pay.pimpo.commons.dto;
 public class DestinationAccountDto {
 
 	private String hash;
+	// TODO: Alterar o document por number!
 	private String document;
 
 	DestinationAccountDto() {}

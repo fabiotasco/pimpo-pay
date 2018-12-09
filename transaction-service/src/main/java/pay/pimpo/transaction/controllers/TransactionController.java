@@ -68,6 +68,11 @@ class TransactionController {
 		return depositRules.process(depositDto, userId);
 	}
 
+	// @PostMapping("/transfer")
+	// Response<TransactionResponseDto> transfer(@RequestBody @Valid final TransferDto transferDto) {
+	// TODO: Implementar!
+	// }
+
 	@DeleteMapping("/{transactionId}/cancel")
 	Response<TransactionResponseDto> cancel(
 		@PathVariable("transactionId") final Long transactionId,
