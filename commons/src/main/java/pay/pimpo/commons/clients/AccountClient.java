@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import pay.pimpo.commons.api.Response;
 import pay.pimpo.commons.dto.CreateAccountDto;
+import pay.pimpo.commons.dto.DestinationAccountDto;
 import pay.pimpo.commons.dto.FetchAccountsDto;
 import pay.pimpo.commons.dto.FetchAccountsResponseDto;
 import pay.pimpo.commons.dto.FetchHolderAccountDto;
@@ -31,6 +32,9 @@ public interface AccountClient {
 
 	@PostMapping("/fetch-holder-account")
 	Response<Account> fetchHolderAccount(@RequestBody FetchHolderAccountDto fetchHolderAccountDto);
+
+	@PostMapping("/fetch-destination-account")
+	Response<Account> fetchDestinationAccount(@RequestBody final DestinationAccountDto destinationAccountDto);
 
 	@PostMapping("/transfer-balance")
 	Response<Void> transferBalance(@RequestBody TransferBalanceDto updateBalanceDto);

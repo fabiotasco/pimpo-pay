@@ -1,8 +1,6 @@
 
 package pay.pimpo.commons.validators;
 
-import org.springframework.stereotype.Component;
-
 import pay.pimpo.commons.exceptions.InvalidPhoneException;
 
 /**
@@ -10,7 +8,6 @@ import pay.pimpo.commons.exceptions.InvalidPhoneException;
  *
  * @author fabio.tasco
  */
-@Component
 public class PhoneValidator {
 
 	private static final char PLUS_SIGN = '+';
@@ -22,7 +19,7 @@ public class PhoneValidator {
 	 * @return Verdadeiro, se estiver no formato brasileiro. Falso, caso contrário.
 	 * @throws InvalidPhoneException Caso seja um número de telefone inválido.
 	 */
-	public boolean validateNumber(final String phone) throws InvalidPhoneException {
+	public static boolean validateNumber(final String phone) throws InvalidPhoneException {
 		// Todos os telefones devem começar com o sinal de +
 		if (phone.charAt(0) != PLUS_SIGN) {
 			throw new InvalidPhoneException("Phone number must start with '+' sign: " + phone);

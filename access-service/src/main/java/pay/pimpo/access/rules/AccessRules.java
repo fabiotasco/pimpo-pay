@@ -32,12 +32,6 @@ public class AccessRules {
 	@Autowired
 	private UserClient userClient;
 
-	@Autowired
-	private DocumentValidator documentValidator;
-
-	@Autowired
-	private PhoneValidator phoneValidator;
-
 	public Response<Account> login(final LoginDto loginDto) {
 		final Response<Long> userLoginResponse = userClient.login(loginDto);
 		if (!userLoginResponse.isSuccess()) {
@@ -73,8 +67,8 @@ public class AccessRules {
 		InvalidPhoneException,
 		NetworkOperatorNotFoundException {
 
-		documentValidator.validate(enrollDto.getDocumentDto().getValue(), enrollDto.getDocumentDto().getType());
-		phoneValidator.validateNumber(enrollDto.getPhoneDto().getNumber());
+		DocumentValidator.validate(enrollDto.getDocumentDto().getValue(), enrollDto.getDocumentDto().getType());
+		PhoneValidator.validateNumber(enrollDto.getPhoneDto().getNumber());
 
 		return networkOperatorClient.findByName(enrollDto.getPhoneDto().getNetworkOperator());
 	}

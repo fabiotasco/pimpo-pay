@@ -9,6 +9,7 @@ import pay.pimpo.commons.entities.Transaction;
 import pay.pimpo.commons.entities.TransactionType;
 import pay.pimpo.transaction.dto.DepositDto;
 import pay.pimpo.transaction.dto.PurchaseDto;
+import pay.pimpo.transaction.dto.TransferDto;
 
 @Component
 public class TransactionConverter {
@@ -41,6 +42,23 @@ public class TransactionConverter {
 			PlanType.PREPAID,
 			holderAccount.getId(),
 			null);
+	}
+
+	public Transaction convert(
+		final TransferDto transferDto,
+		final TransactionType transactionType,
+		final Account holderAccount,
+		final Account destinationAccount) {
+
+		return new Transaction(
+			transferDto.getDate(),
+			transferDto.getAmount(),
+			transferDto.getCurrency(),
+			null,
+			transactionType,
+			PlanType.PREPAID,
+			holderAccount.getId(),
+			destinationAccount.getId());
 	}
 
 }

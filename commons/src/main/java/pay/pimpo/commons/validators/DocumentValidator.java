@@ -3,8 +3,6 @@ package pay.pimpo.commons.validators;
 
 import java.util.InputMismatchException;
 
-import org.springframework.stereotype.Component;
-
 import pay.pimpo.commons.entities.DocumentType;
 import pay.pimpo.commons.exceptions.InvalidDocumentFormatException;
 
@@ -13,7 +11,6 @@ import pay.pimpo.commons.exceptions.InvalidDocumentFormatException;
  *
  * @author fabio.tasco
  */
-@Component
 public class DocumentValidator {
 
 	/**
@@ -24,7 +21,7 @@ public class DocumentValidator {
 	 * @return Verdadeiro, se for o documento informado for válido. Falso, caso contrário.
 	 * @throws InvalidDocumentFormatException Quando o documento for inválido.
 	 */
-	public boolean validate(final String document, final DocumentType documentType)
+	public static boolean validate(final String document, final DocumentType documentType)
 		throws InvalidDocumentFormatException {
 		switch (documentType) {
 			case CPF:
@@ -36,7 +33,7 @@ public class DocumentValidator {
 		}
 	}
 
-	private boolean validateCpf(final String cpf) throws InvalidDocumentFormatException {
+	private static boolean validateCpf(final String cpf) throws InvalidDocumentFormatException {
 		if (cpf.equals("00000000000") || cpf.equals("11111111111")
 			|| cpf.equals("22222222222")
 			|| cpf.equals("33333333333")
@@ -101,7 +98,7 @@ public class DocumentValidator {
 		}
 	}
 
-	private boolean validateCnpj(final String cnpj) throws InvalidDocumentFormatException {
+	private static boolean validateCnpj(final String cnpj) throws InvalidDocumentFormatException {
 		if (cnpj.equals("00000000000000") || cnpj.equals("11111111111111")
 			|| cnpj.equals("22222222222222")
 			|| cnpj.equals("33333333333333")
@@ -111,7 +108,8 @@ public class DocumentValidator {
 			|| cnpj.equals("77777777777777")
 			|| cnpj.equals("88888888888888")
 			|| cnpj.equals("99999999999999")) {
-			throw new InvalidDocumentFormatException("CNPJ cannot be composed by a sequence of the same number: " + cnpj);
+			throw new InvalidDocumentFormatException(
+				"CNPJ cannot be composed by a sequence of the same number: " + cnpj);
 		}
 		if (cnpj.length() != 14) {
 			throw new InvalidDocumentFormatException("CNPJ length must be 11 digits: " + cnpj);

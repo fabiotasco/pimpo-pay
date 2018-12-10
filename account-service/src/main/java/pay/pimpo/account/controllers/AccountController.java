@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pay.pimpo.account.rules.AccountRules;
 import pay.pimpo.commons.api.Response;
 import pay.pimpo.commons.dto.CreateAccountDto;
+import pay.pimpo.commons.dto.DestinationAccountDto;
 import pay.pimpo.commons.dto.FetchAccountsDto;
 import pay.pimpo.commons.dto.FetchAccountsResponseDto;
 import pay.pimpo.commons.dto.FetchHolderAccountDto;
@@ -44,6 +45,12 @@ class AccountController {
 	Response<Account> fetchHolderAccount(@RequestBody final FetchHolderAccountDto fetchHolderAccountDto)
 		throws Exception {
 		return new Response<>(accountRules.fetchHolderAccount(fetchHolderAccountDto));
+	}
+
+	@PostMapping("/fetch-destination-account")
+	Response<Account> fetchDestinationAccount(@RequestBody final DestinationAccountDto destinationAccountDto)
+		throws Exception {
+		return new Response<>(accountRules.fetchDestinationAccount(destinationAccountDto));
 	}
 
 	@PostMapping("/transfer-balance")

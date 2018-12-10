@@ -25,11 +25,13 @@ import pay.pimpo.transaction.dto.DepositDto;
 import pay.pimpo.transaction.dto.PurchaseDto;
 import pay.pimpo.transaction.dto.StatementDto;
 import pay.pimpo.transaction.dto.TransactionResponseDto;
+import pay.pimpo.transaction.dto.TransferDto;
 import pay.pimpo.transaction.rules.CancelRules;
 import pay.pimpo.transaction.rules.DepositRules;
 import pay.pimpo.transaction.rules.PurchaseRules;
 import pay.pimpo.transaction.rules.StatementRules;
 import pay.pimpo.transaction.rules.TransactionRules;
+import pay.pimpo.transaction.rules.TransferRules;
 
 @RestController
 @ResponseStatus(HttpStatus.OK)
@@ -43,6 +45,9 @@ class TransactionController {
 
 	@Autowired
 	private StatementRules statementRules;
+
+	@Autowired
+	private TransferRules transferRules;
 
 	@Autowired
 	private TransactionRules transactionRules;
@@ -68,10 +73,14 @@ class TransactionController {
 		return depositRules.process(depositDto, userId);
 	}
 
-	// @PostMapping("/transfer")
-	// Response<TransactionResponseDto> transfer(@RequestBody @Valid final TransferDto transferDto) {
-	// TODO: Implementar!
-	// }
+	@PostMapping("/transfer")
+	Response<TransactionResponseDto> transfer(
+		@RequestBody @Valid final TransferDto transferDto,
+		@RequestHeader(AuthClient.USER_ID_HEADER_KEY) final Long userId)
+		throws Exception {
+
+		return transferRules.process(transferDto, userId);
+	}
 
 	@DeleteMapping("/{transactionId}/cancel")
 	Response<TransactionResponseDto> cancel(

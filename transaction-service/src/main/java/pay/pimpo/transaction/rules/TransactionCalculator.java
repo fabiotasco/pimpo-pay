@@ -25,7 +25,7 @@ public class TransactionCalculator {
 			case PREPAID:
 				return checkBalance(account, amount);
 			case CREDIT:
-				// TODO: Implementar checkCreditLimit(transactionDto, account);
+				// TODO: Implementar a liquidação do crédito - checkCreditLimit(transactionDto, account);
 			default:
 				throw new UnsupportedOperationException("Operation not available for plan: " + planType);
 		}

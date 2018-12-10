@@ -5,16 +5,14 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import pay.pimpo.commons.dto.DestinationAccountDto;
 import pay.pimpo.commons.dto.HolderAccountDto;
 import pay.pimpo.commons.entities.CurrencyType;
-import pay.pimpo.commons.entities.PlanType;
 
-public class PurchaseDto {
+public class TransferDto {
 
 	@NotNull
 	private Date date;
@@ -27,13 +25,6 @@ public class PurchaseDto {
 	private CurrencyType currency;
 
 	@NotNull
-	private PlanType plan;
-
-	@NotNull
-	@PositiveOrZero
-	private Integer installments;
-
-	@NotNull
 	@JsonProperty("destinationAccount")
 	private DestinationAccountDto destinationAccountDto;
 
@@ -41,47 +32,55 @@ public class PurchaseDto {
 	@JsonProperty("holderAccount")
 	private HolderAccountDto holderAccountDto;
 
-	PurchaseDto() {}
+	TransferDto() {}
 
 	public Date getDate() {
 		return date;
+	}
+
+	public void setDate(final Date date) {
+		this.date = date;
 	}
 
 	public Double getAmount() {
 		return amount;
 	}
 
+	public void setAmount(final Double amount) {
+		this.amount = amount;
+	}
+
 	public CurrencyType getCurrency() {
 		return currency;
 	}
 
-	public PlanType getPlan() {
-		return plan;
-	}
-
-	public Integer getInstallments() {
-		return installments;
+	public void setCurrency(final CurrencyType currency) {
+		this.currency = currency;
 	}
 
 	public DestinationAccountDto getDestinationAccountDto() {
 		return destinationAccountDto;
 	}
 
+	public void setDestinationAccountDto(final DestinationAccountDto destinationAccountDto) {
+		this.destinationAccountDto = destinationAccountDto;
+	}
+
 	public HolderAccountDto getHolderAccountDto() {
 		return holderAccountDto;
 	}
 
+	public void setHolderAccountDto(final HolderAccountDto holderAccountDto) {
+		this.holderAccountDto = holderAccountDto;
+	}
+
 	@Override
 	public String toString() {
-		return "TransactionDto [date=" + date
+		return "TransferDto [date=" + date
 			+ ", amount="
 			+ amount
 			+ ", currency="
 			+ currency
-			+ ", plan="
-			+ plan
-			+ ", installments="
-			+ installments
 			+ ", destinationAccountDto="
 			+ destinationAccountDto
 			+ ", holderAccountDto="

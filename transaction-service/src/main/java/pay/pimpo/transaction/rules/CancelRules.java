@@ -82,6 +82,7 @@ public class CancelRules {
 				// Somente a loja (destination) pode cancelar!
 				return isEventTriggeredByTransactionOwner(transaction.getDestinationAccountId(), userId);
 			case DEPOSIT:
+			case TRANSFER:
 				// Somente o portador (holder) pode cancelar!
 				return isEventTriggeredByTransactionOwner(transaction.getHolderAccountId(), userId);
 			default:

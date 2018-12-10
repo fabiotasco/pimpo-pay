@@ -24,6 +24,9 @@ public class ClearingRules {
 	@Autowired
 	private DepositClearingStrategy depositClearingStrategy;
 
+	@Autowired
+	private TransferClearingStrategy transferClearingStrategy;
+
 	private final Map<TransactionType, ClearingStrategy> clearingStrategyMap;
 
 	public ClearingRules() {
@@ -34,6 +37,7 @@ public class ClearingRules {
 	public void init() {
 		clearingStrategyMap.put(TransactionType.PURCHASE, purchaseClearingStrategy);
 		clearingStrategyMap.put(TransactionType.DEPOSIT, depositClearingStrategy);
+		clearingStrategyMap.put(TransactionType.TRANSFER, transferClearingStrategy);
 	}
 
 	public void process(final Transaction transaction) {

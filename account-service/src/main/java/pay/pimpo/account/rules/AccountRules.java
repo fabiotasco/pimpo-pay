@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import pay.pimpo.account.repositories.AccountRepository;
 import pay.pimpo.commons.dto.CreateAccountDto;
+import pay.pimpo.commons.dto.DestinationAccountDto;
 import pay.pimpo.commons.dto.DocumentDto;
 import pay.pimpo.commons.dto.FetchAccountsDto;
 import pay.pimpo.commons.dto.FetchAccountsResponseDto;
@@ -40,9 +41,6 @@ public class AccountRules {
 
 	@Autowired
 	private AccountRepository accountRepository;
-
-	@Autowired
-	private PhoneValidator phoneValidator;
 
 	/**
 	 * Cria uma nova conta.
@@ -93,7 +91,7 @@ public class AccountRules {
 	public FetchAccountsResponseDto fetchAccounts(final FetchAccountsDto fetchAccountsDto) throws Exception {
 		final Account holderAccount = fetchHolderAccount(
 			new FetchHolderAccountDto(fetchAccountsDto.getHolderAccountDto(), fetchAccountsDto.getUserId()));
-		final Account destinationAccount = fetchDestinationAccount(fetchAccountsDto);
+		final Account destinationAccount = fetchDestinationAccount(fetchAccountsDto.getDestinationAccountDto());
 
 		checkAccountEnrollmentOnPlan(holderAccount, fetchAccountsDto.getPlanType());
 		checkAccountEnrollmentOnPlan(destinationAccount, fetchAccountsDto.getPlanType());
@@ -102,26 +100,27 @@ public class AccountRules {
 	}
 
 	public Account fetchHolderAccount(final FetchHolderAccountDto fetchHolderAccountDto) throws Exception {
-		phoneValidator.validateNumber(fetchHolderAccountDto.getHolderAccountDto().getNumber());
+		PhoneValidator.validateNumber(fetchHolderAccountDto.getHolderAccountDto().getNumber());
 
 		final Account holderAccount = findActiveAccountByUserId(fetchHolderAccountDto.getUserId());
 		final AccountNumber holderAccountNumber = accountNumberRules.getActiveNumber(holderAccount.getNumbers());
+
 		if (!holderAccountNumber.getNumber().equals(fetchHolderAccountDto.getHolderAccountDto().getNumber())) {
 			throw new ActiveAccountNumberNotFound(fetchHolderAccountDto.getHolderAccountDto().getNumber());
 		}
 		return holderAccount;
 	}
 
-	private Account fetchDestinationAccount(final FetchAccountsDto fetchAccountsDto) throws Exception {
+	public Account fetchDestinationAccount(final DestinationAccountDto destinationAccountDto) throws Exception {
 		Account destinationAccount = null;
-		if (fetchAccountsDto.getDestinationAccountDto().getHash() != null) {
+		if (destinationAccountDto.getHash() != null) {
 			// Busca pelo Hash da conta
-			destinationAccount = accountRepository.findByHash(fetchAccountsDto.getDestinationAccountDto().getHash());
+			destinationAccount = accountRepository.findByHash(destinationAccountDto.getHash());
 
-		} else if (fetchAccountsDto.getDestinationAccountDto().getNumber() != null) {
+		} else if (destinationAccountDto.getNumber() != null) {
 			// Busca pelo número do cliente.
 			final AccountNumber accountNumber
-				= accountNumberRules.findActiveAccountNumber(fetchAccountsDto.getDestinationAccountDto().getNumber());
+				= accountNumberRules.findActiveAccountNumber(destinationAccountDto.getNumber());
 			if (accountNumber != null) {
 				destinationAccount = accountNumber.getAccount();
 			}
