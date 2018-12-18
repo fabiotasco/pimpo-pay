@@ -24,14 +24,13 @@ USE `auth`;
 
 /*DROP TABLE IF EXISTS `permission`;*/
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
 CREATE TABLE IF NOT EXISTS `permission` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `created_at` datetime NOT NULL,
   `name` varchar(50) NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,13 +39,12 @@ CREATE TABLE IF NOT EXISTS `permission` (
 
 /*DROP TABLE IF EXISTS `permission_role`;*/
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
 CREATE TABLE IF NOT EXISTS `permission_role` (
   `role_id` bigint(20) NOT NULL,
   `permission_id` bigint(20) NOT NULL,
   KEY `fk_permission` (`permission_id`),
   KEY `fk_role` (`role_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -55,14 +53,13 @@ CREATE TABLE IF NOT EXISTS `permission_role` (
 
 /*DROP TABLE IF EXISTS `role`;*/
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
 CREATE TABLE IF NOT EXISTS `role` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `created_at` datetime NOT NULL,
   `name` varchar(50) NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,13 +68,12 @@ CREATE TABLE IF NOT EXISTS `role` (
 
 /*DROP TABLE IF EXISTS `role_user`;*/
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
 CREATE TABLE IF NOT EXISTS `role_user` (
   `user_id` bigint(20) NOT NULL,
   `role_id` bigint(20) NOT NULL,
   KEY `fk_role` (`role_id`),
   KEY `fk_user` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -86,7 +82,6 @@ CREATE TABLE IF NOT EXISTS `role_user` (
 
 /*DROP TABLE IF EXISTS `user`;*/
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
 CREATE TABLE IF NOT EXISTS `user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `created_at` datetime NOT NULL,
@@ -95,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `username` varchar(14) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_username` (`username`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

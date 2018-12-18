@@ -53,10 +53,6 @@ allprojects {
 	    }
 	}
 	test.finalizedBy jacocoTestReport
-	
-	/* Heroku auto-deploy */
-	task stage(dependsOn: ['build', 'clean'])
-	build.mustRunAfter clean
 }
 
 dependencies {

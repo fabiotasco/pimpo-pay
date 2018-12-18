@@ -22,7 +22,6 @@ USE `transaction`;
 --
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
 CREATE TABLE IF NOT EXISTS `transaction` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `date` datetime NOT NULL,
@@ -34,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `transaction` (
   `holder_account_id` bigint(20) NOT NULL,
   `destination_account_id` bigint(20) NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -42,7 +41,6 @@ CREATE TABLE IF NOT EXISTS `transaction` (
 --
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
- SET character_set_client = utf8mb4 ;
 CREATE TABLE IF NOT EXISTS `transaction_event` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `status` varchar(55) NOT NULL,
@@ -51,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `transaction_event` (
   `transaction_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_transaction` (`transaction_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

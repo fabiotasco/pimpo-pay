@@ -4,9 +4,9 @@ spring:
   application:
     name: account-service
   datasource:
-    url: jdbc:mysql://localhost:3306/account?useSSL=false
-    username: root
-    password: 12345678
+    url: jdbc:mysql://us-cdbr-iron-east-01.cleardb.net:3306/heroku_694b5326ad17805?useSSL=false
+    username: bd1eca3fbaa532
+    password: 8b36c7ed
     driver-class-name: com.mysql.jdbc.Driver
     tomcat:
       test-while-idle: true
@@ -61,6 +61,7 @@ logging:
     ROOT: info
     org.springframework.web: info
     org.hibernate.SQL: info
+    org.springframework.jdbc.datasource.init.ScriptUtils: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
     pay.pimpo: debug
   file:  /tmp/logs/account-service.log

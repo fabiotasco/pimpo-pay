@@ -4,9 +4,9 @@ spring:
   application:
     name: auth-service
   datasource:
-    url: jdbc:mysql://localhost:3306/auth?useSSL=false
-    username: root
-    password: 12345678
+    url: jdbc:mysql://us-cdbr-iron-east-01.cleardb.net:3306/heroku_329cbbf7a84fb95?useSSL=false
+    username: ba3b671582d0e6
+    password: 804da068
     driver-class-name: com.mysql.jdbc.Driver
     tomcat:
       test-while-idle: true
