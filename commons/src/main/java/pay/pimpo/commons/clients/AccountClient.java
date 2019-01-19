@@ -42,7 +42,10 @@ public interface AccountClient {
 	@PostMapping("/sum-amount")
 	Response<Void> sumAmount(@RequestBody SumAmountDto sumAmountDto);
 
-	@GetMapping("/{userId}")
+	@GetMapping("/user/{userId}")
 	Response<Account> findByUserId(@PathVariable("userId") final Long userId);
+
+	@GetMapping("/{id}")
+	Response<Account> findById(@PathVariable("id") final Long id);
 
 }

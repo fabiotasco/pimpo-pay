@@ -20,6 +20,7 @@ import pay.pimpo.commons.dto.FetchHolderAccountDto;
 import pay.pimpo.commons.dto.SumAmountDto;
 import pay.pimpo.commons.dto.TransferBalanceDto;
 import pay.pimpo.commons.entities.Account;
+import pay.pimpo.commons.exceptions.AccountNotFoundException;
 
 @RestController
 @ResponseStatus(HttpStatus.OK)
@@ -63,9 +64,14 @@ class AccountController {
 		return new Response<>(accountRules.sumAmount(sumAmountDto.getAccountId(), sumAmountDto.getAmount()));
 	}
 
-	@GetMapping("/{userId}")
+	@GetMapping("/user/{userId}")
 	Response<Account> findByUserId(@PathVariable("userId") final Long userId) throws Exception {
 		return new Response<>(accountRules.findActiveAccountByUserId(userId));
+	}
+
+	@GetMapping("/{id}")
+	Response<Account> findById(@PathVariable("id") final Long id) throws AccountNotFoundException {
+		return new Response<>(accountRules.findById(id));
 	}
 
 }

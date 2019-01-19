@@ -4,9 +4,9 @@ spring:
   application:
     name: transaction-service
   datasource:
-    url: jdbc:mysql://us-cdbr-iron-east-01.cleardb.net:3306/heroku_cf29bf85a36d940?useSSL=false
-    username: b3358bb98cb89e
-    password: 726970d8
+    url: jdbc:mysql://localhost:3306/transaction?useSSL=false
+    username: root
+    password: 12345678
     driver-class-name: com.mysql.jdbc.Driver
     tomcat:
       test-while-idle: true

@@ -58,4 +58,9 @@ class UserController {
 		return new Response<>(userRules.login(loginDto));
 	}
 
+	@GetMapping("/{id}/username")
+	Response<String> findUsernameById(@PathVariable("id") final Long id) throws UserNotFoundException {
+		return new Response<>(userRules.findUsernameById(id));
+	}
+
 }

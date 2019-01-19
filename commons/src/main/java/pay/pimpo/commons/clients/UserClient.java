@@ -27,4 +27,7 @@ public interface UserClient {
 	@PostMapping("/users/login")
 	Response<Long> login(@RequestBody final LoginDto loginDto);
 
+	@GetMapping("/users/{id}/username")
+	Response<String> findUsernameById(@PathVariable("id") Long id);
+
 }

@@ -24,13 +24,15 @@ import pay.pimpo.commons.exceptions.TransactionNotFoundException;
 import pay.pimpo.transaction.dto.DepositDto;
 import pay.pimpo.transaction.dto.PurchaseDto;
 import pay.pimpo.transaction.dto.StatementDto;
+import pay.pimpo.transaction.dto.TransactionDetailsDto;
 import pay.pimpo.transaction.dto.TransactionResponseDto;
 import pay.pimpo.transaction.dto.TransferDto;
 import pay.pimpo.transaction.rules.CancelRules;
 import pay.pimpo.transaction.rules.DepositRules;
 import pay.pimpo.transaction.rules.PurchaseRules;
 import pay.pimpo.transaction.rules.StatementRules;
-import pay.pimpo.transaction.rules.TransactionRules;
+import pay.pimpo.transaction.rules.TransactionDetailsRules;
+import pay.pimpo.transaction.rules.TransactionEventRules;
 import pay.pimpo.transaction.rules.TransferRules;
 
 @RestController
@@ -50,7 +52,10 @@ class TransactionController {
 	private TransferRules transferRules;
 
 	@Autowired
-	private TransactionRules transactionRules;
+	private TransactionEventRules transactionEventRules;
+
+	@Autowired
+	private TransactionDetailsRules transactionDetailsRules;
 
 	@Autowired
 	private CancelRules cancelRules;
@@ -103,7 +108,16 @@ class TransactionController {
 
 	@PostMapping("/events")
 	Response<Void> addEvent(@RequestBody final TransactionEvent transactionEvent) throws TransactionNotFoundException {
-		return new Response<>(transactionRules.addEvent(transactionEvent));
+		return new Response<>(transactionEventRules.addEvent(transactionEvent));
+	}
+
+	@GetMapping("/{transactionId}")
+	Response<TransactionDetailsDto> getTransationDetails(
+		@PathVariable("transactionId") final Long transactionId,
+		@RequestHeader(AuthClient.USER_ID_HEADER_KEY) final Long userId)
+		throws TransactionNotFoundException {
+
+		return transactionDetailsRules.process(transactionId, userId);
 	}
 
 }

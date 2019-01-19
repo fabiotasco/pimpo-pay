@@ -57,4 +57,12 @@ public class UserRules {
 		return user.getId();
 	}
 
+	public String findUsernameById(final Long id) throws UserNotFoundException {
+		final Optional<User> userOptional = userRepository.findById(id);
+		if (userOptional.isPresent()) {
+			return userOptional.get().getUsername();
+		}
+		throw new UserNotFoundException(id);
+	}
+
 }

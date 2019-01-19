@@ -171,4 +171,12 @@ public class AccountRules {
 		return optional.get();
 	}
 
+	public Account findById(final Long id) throws AccountNotFoundException {
+		final Optional<Account> accountOptional = accountRepository.findById(id);
+		if (accountOptional.isPresent()) {
+			return accountOptional.get();
+		}
+		throw new AccountNotFoundException();
+	}
+
 }

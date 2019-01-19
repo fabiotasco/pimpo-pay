@@ -9,7 +9,7 @@ import pay.pimpo.commons.exceptions.TransactionNotFoundException;
 import pay.pimpo.transaction.repositories.TransactionEventRepository;
 
 @Component
-public class TransactionRules {
+public class TransactionEventRules {
 
 	@Autowired
 	private TransactionEventRepository transactionEventRepository;
