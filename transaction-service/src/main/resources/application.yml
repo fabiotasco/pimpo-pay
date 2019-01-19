@@ -60,6 +60,7 @@ logging:
   level:
     ROOT: info
     org.springframework.web: info
+    org.springframework.jdbc.datasource.init.ScriptUtils: info
     org.hibernate.SQL: info
     org.hibernate.type.descriptor.sql.BasicBinder: trace
     pay.pimpo: debug

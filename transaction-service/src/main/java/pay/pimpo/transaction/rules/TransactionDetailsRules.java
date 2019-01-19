@@ -11,6 +11,7 @@ import pay.pimpo.commons.clients.AccountClient;
 import pay.pimpo.commons.clients.UserClient;
 import pay.pimpo.commons.entities.Account;
 import pay.pimpo.commons.entities.Transaction;
+import pay.pimpo.commons.entities.TransactionType;
 import pay.pimpo.commons.exceptions.TransactionNotFoundException;
 import pay.pimpo.transaction.converters.StatementTransactionDtoConverter;
 import pay.pimpo.transaction.converters.TransactionDetailsAccountDtoConverter;
@@ -53,17 +54,20 @@ public class TransactionDetailsRules {
 			return new Response<>(holderAccountDtoResponse.getErrors());
 		}
 
-		final Response<TransactionDetailsAccountDto> destinationAccountDtoResponse
-			= convertAccount(transaction.getDestinationAccountId());
-		if (!destinationAccountDtoResponse.isSuccess()) {
-			return new Response<>(destinationAccountDtoResponse.getErrors());
+		// Depósito não tem destinário, pois cai na própria conta!
+		Response<TransactionDetailsAccountDto> destinationAccountDtoResponse = null;
+		if (transaction.getType() != TransactionType.DEPOSIT) {
+			destinationAccountDtoResponse = convertAccount(transaction.getDestinationAccountId());
+			if (!destinationAccountDtoResponse.isSuccess()) {
+				return new Response<>(destinationAccountDtoResponse.getErrors());
+			}
 		}
 
 		return new Response<>(
 			new TransactionDetailsDto(
 				statementTransactionDto,
 				holderAccountDtoResponse.getContent(),
-				destinationAccountDtoResponse.getContent()));
+				destinationAccountDtoResponse != null ? destinationAccountDtoResponse.getContent() : null));
 	}
 
 	private Response<TransactionDetailsAccountDto> convertAccount(final Long accountId) {
