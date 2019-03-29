@@ -41,6 +41,7 @@ public class StatementRules {
 			return new Response<>(response.getErrors());
 		}
 		final Account account = response.getContent();
+		// TODO: Retornar no extrato as transações feitas pelo usuário e as que ele também é destinatário
 		final Page<Transaction> page
 			= transactionRepository.findAllByHolderAccountIdOrderByDateDesc(account.getId(), pageRequest);
 		final List<StatementTransactionDto> statementTransactionDtoList = convertTransactions(page);
