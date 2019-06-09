@@ -26,7 +26,7 @@ public class StandardErrors {
 		= new ErrorBuilder().setCode("ACT-0002").setMessage("Conta inexistente!").build();
 
 	public static final Error ACCOUNT_STATUS_NOT_FOUND
-		= new ErrorBuilder().setCode("ACT-0003").setMessage("Conta não localizada!").build();
+		= new ErrorBuilder().setCode("ACT-0003").setMessage("Situação da conta não localizada!").build();
 
 	public static final Error ACCOUNT_CONTRACT_NOT_FOUND
 		= new ErrorBuilder().setCode("ACT-0004").setMessage("Contrato não localizado!").build();
@@ -50,10 +50,13 @@ public class StandardErrors {
 		= new ErrorBuilder().setCode("ACT-0010").setMessage("Plano não contratado!").build();
 
 	public static final Error ACTIVE_ACCOUNT_NUMBER_NOT_FOUND
-		= new ErrorBuilder().setCode("ACT-0011").setMessage("Número não localizado!").build();
+		= new ErrorBuilder().setCode("ACT-0011").setMessage("Número não está ativo!").build();
 
 	public static final Error ACCOUNT_NOT_ACTIVE
 		= new ErrorBuilder().setCode("ACT-0012").setMessage("Conta inativa!").build();
+
+	public static final Error ACCOUNT_NUMBER_NOT_FOUND
+		= new ErrorBuilder().setCode("ACT-0013").setMessage("Conta não localizada!").build();
 
 	// Transaction errors
 	public static final Error TRANSACTION_NOT_FOUND

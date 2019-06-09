@@ -126,8 +126,6 @@ public class AccountNumber implements Serializable {
 			+ networkOperator
 			+ ", status="
 			+ status
-			+ ", account="
-			+ account
 			+ "]";
 	}
 

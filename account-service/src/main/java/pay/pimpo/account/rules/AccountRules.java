@@ -23,7 +23,7 @@ import pay.pimpo.commons.entities.PlanType;
 import pay.pimpo.commons.exceptions.AccountNotActiveException;
 import pay.pimpo.commons.exceptions.AccountNotEnrolledOnPlanException;
 import pay.pimpo.commons.exceptions.AccountNotFoundException;
-import pay.pimpo.commons.exceptions.ActiveAccountNumberNotFound;
+import pay.pimpo.commons.exceptions.ActiveAccountNumberNotFoundException;
 import pay.pimpo.commons.security.HashGenerator;
 import pay.pimpo.commons.validators.PhoneValidator;
 
@@ -106,7 +106,7 @@ public class AccountRules {
 		final AccountNumber holderAccountNumber = accountNumberRules.getActiveNumber(holderAccount.getNumbers());
 
 		if (!holderAccountNumber.getNumber().equals(fetchHolderAccountDto.getHolderAccountDto().getNumber())) {
-			throw new ActiveAccountNumberNotFound(fetchHolderAccountDto.getHolderAccountDto().getNumber());
+			throw new ActiveAccountNumberNotFoundException(fetchHolderAccountDto.getHolderAccountDto().getNumber());
 		}
 		return holderAccount;
 	}

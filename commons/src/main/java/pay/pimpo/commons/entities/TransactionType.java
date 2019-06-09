@@ -14,16 +14,7 @@ public enum TransactionType {
 	DEPOSIT,
 
 	/** Transferência entre contas */
-	TRANSFER,
-
-	/** Débito automático */
-	AUTOMATIC_DEBIT,
-
-	/** Saque */
-	WITHDRAWAL,
-
-	/** Recarga de celular */
-	MOBILE_RECHARGE;
+	TRANSFER;
 
 	@JsonValue
 	public String value() {

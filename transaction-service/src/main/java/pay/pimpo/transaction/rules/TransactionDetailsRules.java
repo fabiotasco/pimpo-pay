@@ -46,7 +46,14 @@ public class TransactionDetailsRules {
 		}
 		final Transaction transaction = transactionOptional.get();
 
-		final StatementTransactionDto statementTransactionDto = statementTransactionDtoConverter.convert(transaction);
+		final Response<Account> response = accountClient.findByUserId(userId);
+		if (!response.isSuccess()) {
+			return new Response<>(response.getErrors());
+		}
+		final Account account = response.getContent();
+
+		final StatementTransactionDto statementTransactionDto
+			= statementTransactionDtoConverter.convert(transaction, account.getId());
 
 		final Response<TransactionDetailsAccountDto> holderAccountDtoResponse
 			= convertAccount(transaction.getHolderAccountId());

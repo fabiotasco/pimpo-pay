@@ -12,6 +12,8 @@ import pay.pimpo.commons.entities.Account;
 import pay.pimpo.commons.entities.AccountNumber;
 import pay.pimpo.commons.entities.AccountNumberStatus;
 import pay.pimpo.commons.entities.NetworkOperator;
+import pay.pimpo.commons.exceptions.AccountNumberNotFoundException;
+import pay.pimpo.commons.exceptions.ActiveAccountNumberNotFoundException;
 import pay.pimpo.commons.exceptions.ActiveAccountNumberNotUniqueException;
 import pay.pimpo.commons.exceptions.NetworkOperatorNotFoundException;
 
@@ -76,12 +78,14 @@ public class AccountNumberRules {
 	 *
 	 * @param accountNumbers Lista de contas.
 	 * @return O número ativo.
+	 * @throws ActiveAccountNumberNotFoundException Conta não está ativa.
 	 */
-	public AccountNumber getActiveNumber(final List<AccountNumber> accountNumbers) {
+	public AccountNumber getActiveNumber(final List<AccountNumber> accountNumbers)
+		throws ActiveAccountNumberNotFoundException {
 		return accountNumbers.parallelStream()
 			.filter(accountNumber -> accountNumber.getStatus() == AccountNumberStatus.ACTIVE)
 			.findAny()
-			.get();
+			.orElseThrow(() -> new ActiveAccountNumberNotFoundException(accountNumbers.toString()));
 	}
 
 	/**
@@ -89,9 +93,16 @@ public class AccountNumberRules {
 	 *
 	 * @param number Número da conta.
 	 * @return A conta com número ativo.
+	 * @throws AccountNumberNotFoundException Número não foi encontrado.
+	 * @throws ActiveAccountNumberNotFoundException Conta não está ativa.
 	 */
-	public AccountNumber findActiveAccountNumber(final String number) {
+	public AccountNumber findActiveAccountNumber(final String number)
+		throws AccountNumberNotFoundException,
+		ActiveAccountNumberNotFoundException {
 		final List<AccountNumber> numbers = accountNumberRepository.findByNumber(number);
+		if (numbers.isEmpty()) {
+			throw new AccountNumberNotFoundException(number);
+		}
 		return getActiveNumber(numbers);
 	}
 

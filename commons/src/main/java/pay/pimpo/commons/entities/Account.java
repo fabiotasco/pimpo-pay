@@ -142,12 +142,6 @@ public class Account implements Serializable {
 			+ hash
 			+ ", balance="
 			+ balance
-			+ ", contracts="
-			+ contracts
-			+ ", plans="
-			+ plans
-			+ ", numbers="
-			+ numbers
 			+ ", status="
 			+ status
 			+ ", userId="

@@ -9,6 +9,9 @@ import pay.pimpo.commons.entities.Transaction;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-	Page<Transaction> findAllByHolderAccountIdOrderByDateDesc(Long holderAccountId, Pageable pageable);
+	Page<Transaction> findAllByHolderAccountIdOrDestinationAccountIdOrderByDateDesc(
+		Long holderAccountId,
+		Long destinationAccountId,
+		Pageable pageable);
 
 }

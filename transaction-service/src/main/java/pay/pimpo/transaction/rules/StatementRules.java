@@ -41,11 +41,15 @@ public class StatementRules {
 			return new Response<>(response.getErrors());
 		}
 		final Account account = response.getContent();
-		// TODO: Retornar no extrato as transações feitas pelo usuário e as que ele também é destinatário
-		final Page<Transaction> page
-			= transactionRepository.findAllByHolderAccountIdOrderByDateDesc(account.getId(), pageRequest);
-		final List<StatementTransactionDto> statementTransactionDtoList = convertTransactions(page);
-		final PaginationDto paginationDto = paginationDtoConverter.convert(page);
+		final Page<Transaction> transactionsPage
+			= transactionRepository.findAllByHolderAccountIdOrDestinationAccountIdOrderByDateDesc(account.getId(),
+				account.getId(),
+				pageRequest);
+
+		final List<StatementTransactionDto> statementTransactionDtoList
+			= convertTransactions(transactionsPage, account.getId());
+
+		final PaginationDto paginationDto = paginationDtoConverter.convert(transactionsPage);
 
 		final StatementDto statementDto
 			= new StatementDto(account.getBalance(), statementTransactionDtoList, paginationDto);
@@ -53,10 +57,10 @@ public class StatementRules {
 		return new Response<>(statementDto);
 	}
 
-	private List<StatementTransactionDto> convertTransactions(final Page<Transaction> page) {
+	private List<StatementTransactionDto> convertTransactions(final Page<Transaction> page, final Long accountId) {
 		return page.getContent()
 			.stream()
-			.map(transaction -> statementTransactionDtoConverter.convert(transaction))
+			.map(transaction -> statementTransactionDtoConverter.convert(transaction, accountId))
 			.collect(Collectors.toList());
 	}
 
