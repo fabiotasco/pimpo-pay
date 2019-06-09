@@ -23,6 +23,7 @@ public class StatementTransactionDto {
 	private final PlanType planType;
 	private final TransactionStatus status;
 	private final String reasonCode;
+	private final String reasonMessage;
 
 	public StatementTransactionDto(
 		final Long id,
@@ -33,7 +34,8 @@ public class StatementTransactionDto {
 		final TransactionType type,
 		final PlanType planType,
 		final TransactionStatus status,
-		final String reasonCode) {
+		final String reasonCode,
+		final String reasonMessage) {
 
 		this.id = id;
 		this.date = date;
@@ -44,6 +46,7 @@ public class StatementTransactionDto {
 		this.planType = planType;
 		this.status = status;
 		this.reasonCode = reasonCode;
+		this.reasonMessage = reasonMessage;
 	}
 
 	public Long getId() {
@@ -82,6 +85,10 @@ public class StatementTransactionDto {
 		return reasonCode;
 	}
 
+	public String getReasonMessage() {
+		return reasonMessage;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -93,6 +100,7 @@ public class StatementTransactionDto {
 		result = prime * result + (installments == null ? 0 : installments.hashCode());
 		result = prime * result + (planType == null ? 0 : planType.hashCode());
 		result = prime * result + (reasonCode == null ? 0 : reasonCode.hashCode());
+		result = prime * result + (reasonMessage == null ? 0 : reasonMessage.hashCode());
 		result = prime * result + (status == null ? 0 : status.hashCode());
 		result = prime * result + (type == null ? 0 : type.hashCode());
 		return result;
@@ -151,6 +159,13 @@ public class StatementTransactionDto {
 		} else if (!reasonCode.equals(other.reasonCode)) {
 			return false;
 		}
+		if (reasonMessage == null) {
+			if (other.reasonMessage != null) {
+				return false;
+			}
+		} else if (!reasonMessage.equals(other.reasonMessage)) {
+			return false;
+		}
 		if (status != other.status) {
 			return false;
 		}
@@ -179,6 +194,8 @@ public class StatementTransactionDto {
 			+ status
 			+ ", reasonCode="
 			+ reasonCode
+			+ ", reasonMessage="
+			+ reasonMessage
 			+ "]";
 	}
 

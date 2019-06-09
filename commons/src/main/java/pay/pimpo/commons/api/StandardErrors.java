@@ -1,6 +1,8 @@
 
 package pay.pimpo.commons.api;
 
+import java.lang.reflect.Field;
+
 import pay.pimpo.commons.builders.ErrorBuilder;
 
 public class StandardErrors {
@@ -85,5 +87,20 @@ public class StandardErrors {
 
 	public static final Error RESOURCE_NOT_FOUND
 		= new ErrorBuilder().setCode("GEN-0002").setMessage("Recurso não encontrado!").build();
+
+	public static String getMessage(final String code) throws IllegalArgumentException, IllegalAccessException {
+		final Field[] fields = StandardErrors.class.getDeclaredFields();
+		for (final Field field : fields) {
+			field.setAccessible(true);
+			final Object object = field.get(null);
+			if (object != null && object instanceof Error) {
+				final Error error = (Error) object;
+				if (error.getCode().equals(code)) {
+					return error.getMessage();
+				}
+			}
+		}
+		return null;
+	}
 
 }

@@ -1,6 +1,7 @@
 
 package pay.pimpo.commons.api;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
@@ -57,6 +58,20 @@ public class StandardErrorsTest {
 				}
 			}
 		}
+	}
+
+	@Test
+	public void testGetMessageFromCode() throws Exception {
+		final String errorCode = "TRX-0003";
+		final String message = StandardErrors.getMessage(errorCode);
+		assertNotNull(message);
+	}
+
+	@Test
+	public void testGetMessageFromInvalidCode() throws Exception {
+		final String errorCode = "InvalidCode";
+		final String message = StandardErrors.getMessage(errorCode);
+		assertNull(message);
 	}
 
 }
